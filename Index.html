@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>La Quête des Nombres : Le Donjon Mathématique</title>
+  
+  <!-- Polices modernes et douces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      height: 100dvh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #0b0f19 55%, #050811 100%);
+      color: #f8fafc;
+      letter-spacing: -0.015em;
+    }
+
+    .font-numbers {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-feature-settings: "tnum";
+    }
+
+    @keyframes floatMonster {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-5px) scale(1.03); }
+    }
+    .monster-idle {
+      animation: floatMonster 3s ease-in-out infinite;
+    }
+
+    @keyframes shakeHit {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      20% { transform: translate(-6px, -2px) rotate(-3deg) scale(1.05); }
+      40% { transform: translate(6px, 2px) rotate(3deg) scale(0.96); }
+      60% { transform: translate(-4px, 1px) rotate(-1.5deg); }
+      80% { transform: translate(4px, -1px) rotate(1.5deg); }
+    }
+    .shake {
+      animation: shakeHit 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+
+    .key-btn {
+      transition: all 0.08s ease;
+      box-shadow: 0 3px 0 #1e293b, 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .key-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #1e293b, 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .action-btn-attack {
+      box-shadow: 0 3px 0 #047857, 0 6px 14px rgba(16, 185, 129, 0.3);
+    }
+    .action-btn-attack:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #047857, 0 2px 6px rgba(16, 185, 129, 0.2);
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="w-full h-full flex flex-col justify-between items-center p-2 sm:p-3 relative select-none">
+
+  <!-- BARRE SUPÉRIEURE DU JOUEUR -->
+  <header class="w-full max-w-[420px] flex items-center justify-between bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-slate-700/60 shadow-lg shrink-0">
+    <div class="flex items-center gap-2">
+      <button onclick="toggleShop()" class="flex items-center gap-1.5 bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-500/40 px-2.5 py-1 rounded-xl active:scale-95 transition">
+        <span id="player-avatar" class="text-sm">🧙‍♀️</span>
+        <span id="player-title" class="text-xs font-semibold text-indigo-100">Apprentie</span>
+      </button>
+      <div id="hearts-container" class="flex items-center gap-0.5 text-xs">
+        <span>❤️</span><span>❤️</span><span>❤️</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1 bg-amber-950/60 border border-amber-400/40 px-2.5 py-1 rounded-xl text-amber-300 font-bold text-xs">
+        <span>🪙</span>
+        <span id="gold-display" class="font-numbers">0</span>
+      </div>
+      <button id="audio-toggle-btn" onclick="toggleAudio()" class="w-7 h-7 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-xs active:scale-90 transition">
+        🔊
+      </button>
+      <button onclick="openWorldMenu()" class="flex items-center gap-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold text-xs px-2.5 py-1 rounded-xl shadow-md border border-violet-400/40 active:scale-95 transition">
+        <span>🗺️</span>
+        <span>Mondes</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- SOUS-BARRE : MONDE ACTUEL & COMBO -->
+  <div class="w-full max-w-[420px] flex items-center justify-between text-xs font-medium text-slate-300 px-1 py-0.5 shrink-0">
+    <button onclick="openWorldMenu()" class="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/70 px-2.5 py-1 rounded-xl active:scale-95 transition">
+      <span id="world-icon">🌲</span>
+      <span id="world-title" class="truncate max-w-[170px] font-semibold text-[11px] text-slate-200">1. Forêt des Additions</span>
+      <span class="text-[10px] text-indigo-300 font-bold">Changer ▾</span>
+    </button>
+    <div id="streak-badge" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[10px] shadow">
+      ⚡ COMBO x<span id="combo-count">1</span>
+    </div>
+  </div>
+
+  <!-- JAUGE DU MODE CHRONO (NIVEAU 6) -->
+  <div id="chrono-container" class="w-full max-w-[420px] hidden flex-col items-center shrink-0 px-1">
+    <div class="w-full flex justify-between items-center text-[11px] font-semibold text-amber-200 px-1 mb-0.5">
+      <span class="flex items-center gap-1">⏱️ Vitesse : <span id="chrono-seconds-text" class="text-white font-bold font-numbers text-xs">10s</span></span>
+      <span id="chrono-bonus-tag" class="text-emerald-400 text-[10px] font-bold opacity-0 transition-opacity">⚡ Bonus Vitesse +1 🪙 !</span>
+    </div>
+    <div class="w-full bg-slate-900/90 h-2 rounded-full p-0.5 border border-slate-700/80 shadow-inner overflow-hidden">
+      <div id="chrono-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full transition-all duration-100 ease-linear" style="width: 100%;"></div>
+    </div>
+  </div>
+
+  <!-- ARENA DU MONSTRE -->
+  <section class="w-full max-w-[420px] flex flex-col items-center justify-center relative py-1 shrink-0">
+    <div id="monster-wrapper" class="flex flex-col items-center transition-transform">
+      <div id="monster-sprite" class="text-5xl sm:text-6xl filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] monster-idle cursor-pointer" onclick="pokeMonster()">
+        🐺
+      </div>
+      <div class="flex items-center gap-1.5 mt-0.5">
+        <span id="monster-name" class="font-semibold text-xs text-slate-200">Loup Sylvestre</span>
+        <span class="text-[10px] bg-slate-800 text-amber-300 px-2 py-0.5 rounded-full border border-slate-700 font-semibold">Étape <span id="monster-level">1</span>/3</span>
+      </div>
+      <div class="w-36 sm:w-44 bg-slate-950 h-2 rounded-full p-0.5 border border-slate-700/80 shadow-inner mt-1 overflow-hidden">
+        <div id="monster-hp-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300" style="width: 100%;"></div>
+      </div>
+      <span id="monster-hp-text" class="text-[10px] text-slate-400 font-medium mt-0.5 font-numbers">3 / 3 PV</span>
+    </div>
+    <div id="fx-layer" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
+  </section>
+
+  <!-- ZONE DE L'ÉNIGME MATHÉMATIQUE -->
+  <section class="w-full max-w-[400px] bg-slate-900/80 backdrop-blur-md p-2.5 rounded-2xl border border-slate-700/70 shadow-xl flex flex-col items-center justify-center shrink-0 min-h-[76px]">
+    <div id="question-header" class="text-[10px] tracking-wider text-indigo-300 font-bold uppercase mb-0.5">Énigme Mathématique</div>
+    <div id="math-problem-box" class="w-full flex items-center justify-center gap-2 text-center">
+      <div id="math-problem" class="text-2xl font-bold text-white leading-tight px-1 font-numbers">
+        49 + 39
+      </div>
+      <span id="equal-sign" class="text-amber-400 font-bold text-xl">=</span>
+      <div id="answer-slot" class="min-w-[68px] h-9 px-2.5 rounded-xl bg-slate-950 border-2 border-amber-400/80 flex items-center justify-center text-xl font-bold text-amber-300 shadow-inner">
+        <span id="answer-text" class="text-slate-500 font-numbers">?</span>
+      </div>
+    </div>
+    <div id="coach-hint-quick" class="text-[11px] text-slate-400 text-center font-normal mt-1 truncate max-w-full">
+      Trouve la bonne réponse pour porter un coup d'épée !
+    </div>
+  </section>
+
+  <!-- CLAVIER NUMÉRIQUE TACTILE DOUX -->
+  <section class="w-full max-w-[340px] pb-1 pt-1 shrink-0">
+    <div class="grid grid-cols-3 gap-1.5 w-full">
+      <button onclick="handleNumInput('1')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">1</button>
+      <button onclick="handleNumInput('2')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">2</button>
+      <button onclick="handleNumInput('3')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">3</button>
+
+      <button onclick="handleNumInput('4')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">4</button>
+      <button onclick="handleNumInput('5')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">5</button>
+      <button onclick="handleNumInput('6')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">6</button>
+
+      <button onclick="handleNumInput('7')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">7</button>
+      <button onclick="handleNumInput('8')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-750 font-numbers">8</button>
+      <button onclick="handleNumInput('9')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">9</button>
+
+      <button onclick="handleNumInput(',')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-indigo-200 font-bold text-xl border border-slate-700 active:bg-slate-700 font-numbers">,</button>
+      <button onclick="handleNumInput('0')" class="key-btn h-10 rounded-xl bg-slate-800/95 hover:bg-slate-750 text-white font-bold text-lg border border-slate-700 active:bg-slate-700 font-numbers">0</button>
+      <button onclick="handleBackspace()" class="key-btn h-10 rounded-xl bg-rose-950/70 hover:bg-rose-900/70 text-rose-300 font-bold text-lg border border-rose-800/60 active:bg-rose-900">⌫</button>
+    </div>
+
+    <button onclick="handleConfirmAnswer()" class="action-btn-attack w-full mt-1.5 h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-bold text-xs tracking-wide border border-emerald-400/80 active:scale-[0.98] transition flex items-center justify-center gap-2">
+      <span>⚔️</span> ATTAQUER LE MONSTRE
+    </button>
+  </section>
+
+  <!-- GRAND POP-UP D'EXPLICATION PÉDAGOGIQUE -->
+  <div id="explanation-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3.5 hidden">
+    <div class="bg-slate-900 border border-amber-400/70 rounded-3xl p-4 sm:p-5 max-w-sm w-full shadow-2xl flex flex-col items-center text-center">
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/60 flex items-center justify-center text-2xl mb-2 shadow-inner">
+        🧙‍♂️
+      </div>
+      <div class="font-bold text-base text-amber-300 mb-0.5">Le Conseil du Grand Mage</div>
+      <div class="text-xs text-slate-400 mb-2.5">Chaque erreur te rend plus forte !</div>
+
+      <!-- Question rappelée -->
+      <div class="w-full bg-slate-950/80 rounded-xl p-2.5 border border-slate-800 mb-2">
+        <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Énigme :</div>
+        <div id="explain-question" class="text-sm font-semibold text-slate-200 mt-0.5 font-numbers">49 + 39</div>
+      </div>
+
+      <!-- Réponse attendue -->
+      <div class="w-full bg-emerald-950/60 rounded-xl p-2.5 border border-emerald-500/40 mb-2.5">
+        <div class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Bonne Réponse :</div>
+        <div id="explain-answer" class="text-2xl font-bold text-emerald-300 mt-0.5 font-numbers">88</div>
+      </div>
+
+      <!-- Astuce étape par étape -->
+      <div class="w-full bg-slate-950/80 rounded-xl p-3 border border-indigo-900/50 mb-3 text-left">
+        <div class="text-xs text-amber-300 font-semibold flex items-center gap-1 mb-1">
+          <span>💡</span> Méthode de calcul mental :
+        </div>
+        <div id="explain-step-by-step" class="text-xs text-slate-300 leading-relaxed font-normal">
+          Arrondis à la dizaine : 50 + 40 = 90. Comme on a ajouté 1 à chaque nombre (soit 2 en trop), on les retire : 90 - 2 = 88 !
+        </div>
+      </div>
+
+      <button onclick="closeExplanation()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-bold text-xs shadow-md active:scale-95 transition">
+        J'ai compris ! Continuer ⚔️
+      </button>
+    </div>
+  </div>
+
+  <!-- SÉLECTION DES MONDES (AU DÉMARRAGE ET EN JEU) -->
+  <div id="world-select-overlay" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-40 flex items-center justify-center p-3">
+    <div class="w-full max-w-md max-h-[96dvh] bg-slate-900/95 border border-slate-700/70 rounded-3xl p-3.5 sm:p-4 shadow-2xl flex flex-col justify-between">
+      <div class="text-center mb-2">
+        <div class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-400/40 text-[10px] text-indigo-300 font-semibold tracking-wider uppercase mb-1">
+          ✨ Révise tes maths CM2 / 6e en t'amusant
+        </div>
+        <h2 class="font-bold text-lg sm:text-xl text-amber-300">La Quête des Nombres</h2>
+        <p class="text-xs text-slate-400">Choisis le domaine que tu souhaites conquérir :</p>
+      </div>
+
+      <!-- Liste des 6 Niveaux -->
+      <div class="space-y-1.5 overflow-y-auto max-h-[40dvh] pr-1 custom-scroll">
+        <!-- Niveau 1 -->
+        <button onclick="launchWorld(1)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-emerald-950/50 to-slate-900 border border-emerald-500/40 flex items-center justify-between active:scale-[0.98] transition text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">🌲</span>
+            <div>
+              <div class="font-semibold text-xs text-emerald-300 flex items-center gap-1.5">
+                <span>Niveau 1</span>
+                <span class="text-[11px] text-emerald-400/80 font-normal">· Forêt des Additions</span>
+              </div>
+              <div class="text-[11px] text-slate-300">Additions astucieuses, compléments à 100 et 1000</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-emerald-900/70 text-emerald-200 px-2 py-0.5 rounded-lg border border-emerald-600/40 font-semibold">Jouer</span>
+        </button>
+
+        <!-- Niveau 2 -->
+        <button onclick="launchWorld(2)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-amber-950/50 to-slate-900 border border-amber-500/40 flex items-center justify-between active:scale-[0.98] transition text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">🏰</span>
+            <div>
+              <div class="font-semibold text-xs text-amber-300 flex items-center gap-1.5">
+                <span>Niveau 2</span>
+                <span class="text-[11px] text-amber-400/80 font-normal">· Donjon des Multiplications</span>
+              </div>
+              <div class="text-[11px] text-slate-300">Tables de 6 à 9, carrés parfaits et décompositions</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-amber-900/70 text-amber-200 px-2 py-0.5 rounded-lg border border-amber-600/40 font-semibold">Jouer</span>
+        </button>
+
+        <!-- Niveau 3 -->
+        <button onclick="launchWorld(3)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-cyan-950/50 to-slate-900 border border-cyan-500/40 flex items-center justify-between active:scale-[0.98] transition text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">🏛️</span>
+            <div>
+              <div class="font-semibold text-xs text-cyan-300 flex items-center gap-1.5">
+                <span>Niveau 3</span>
+                <span class="text-[11px] text-cyan-400/80 font-normal">· Marais des Décimaux</span>
+              </div>
+              <div class="text-[11px] text-slate-300">Nombres à virgule, additions et × 10 / ÷ 100</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-cyan-900/70 text-cyan-200 px-2 py-0.5 rounded-lg border border-cyan-600/40 font-semibold">Jouer</span>
+        </button>
+
+        <!-- Niveau 4 -->
+        <button onclick="launchWorld(4)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-rose-950/50 to-slate-900 border border-rose-500/40 flex items-center justify-between active:scale-[0.98] transition text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">🌋</span>
+            <div>
+              <div class="font-semibold text-xs text-rose-300 flex items-center gap-1.5">
+                <span>Niveau 4</span>
+                <span class="text-[11px] text-rose-400/80 font-normal">· Repaire du Boss</span>
+              </div>
+              <div class="text-[11px] text-slate-300">Astuces rapides pour × 5, × 11 et × 25</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-rose-900/70 text-rose-200 px-2 py-0.5 rounded-lg border border-rose-600/40 font-semibold">Jouer</span>
+        </button>
+
+        <!-- Niveau 5 -->
+        <button onclick="launchWorld(5)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-purple-950/50 to-slate-900 border border-purple-500/40 flex items-center justify-between active:scale-[0.98] transition text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">📜</span>
+            <div>
+              <div class="font-semibold text-xs text-purple-300 flex items-center gap-1.5">
+                <span>Niveau 5</span>
+                <span class="text-[11px] text-purple-400/80 font-normal">· Labyrinthe des Énigmes</span>
+              </div>
+              <div class="text-[11px] text-slate-300">Problèmes du quotidien : monnaie, partages, durées</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-purple-900/70 text-purple-200 px-2 py-0.5 rounded-lg border border-purple-600/40 font-semibold">Quête</span>
+        </button>
+
+        <!-- Niveau 6 (Mode Chrono) -->
+        <button onclick="launchWorld(6)" class="w-full p-2.5 rounded-2xl bg-gradient-to-r from-amber-950/60 to-slate-900 border-2 border-amber-400/80 flex items-center justify-between active:scale-[0.98] transition text-left shadow-lg">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">⏱️</span>
+            <div>
+              <div class="font-semibold text-xs text-amber-300 flex items-center gap-1.5">
+                <span>Niveau 6</span>
+                <span class="text-[11px] text-amber-400 font-bold">· L'Arène du Temps</span>
+              </div>
+              <div class="text-[11px] text-amber-100/90">10s par calcul ! Tables réflexes, doubles & rapidité</div>
+            </div>
+          </div>
+          <span class="text-[10px] bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 px-2.5 py-1 rounded-lg font-bold tracking-wide shadow">DÉFI ⚡</span>
+        </button>
+      </div>
+
+      <!-- HISTORIQUE DES 10 DERNIERS PARCOURS -->
+      <div class="mt-2 p-2 rounded-2xl bg-slate-950/70 border border-slate-800 shrink-0">
+        <div class="flex items-center justify-between text-[11px] font-semibold text-slate-300 mb-1 px-1">
+          <span class="flex items-center gap-1">📜 10 derniers parcours <span class="text-[9px] text-indigo-300 font-normal">(touche pour le détail)</span></span>
+          <button onclick="clearRunHistory()" class="text-[10px] text-rose-400 hover:text-rose-300 transition">Effacer</button>
+        </div>
+        <div id="runs-history-list" class="space-y-1 max-h-28 overflow-y-auto pr-1 text-[10px] custom-scroll">
+          <!-- Rempli par renderRunsHistory() -->
+        </div>
+      </div>
+
+      <div class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-medium shrink-0">
+        <span>Victoires : <strong id="menu-total-wins" class="text-amber-300 font-numbers">0</strong></span>
+        <span>Or amassé : <strong id="menu-total-coins" class="text-amber-300 font-numbers">0 🪙</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- POP-UP DÉTAILS D'UN PARCOURS -->
+  <div id="run-detail-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+    <div class="bg-slate-900 border border-indigo-400/60 rounded-3xl p-4 max-w-sm w-full max-h-[90dvh] flex flex-col shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800 shrink-0">
+        <div>
+          <h3 id="run-detail-title" class="font-bold text-sm text-indigo-200">Détails du Parcours</h3>
+          <p id="run-detail-subtitle" class="text-[10px] text-slate-400">Questions & Réponses données</p>
+        </div>
+        <button onclick="closeRunDetail()" class="text-slate-400 text-sm font-bold px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700">✕</button>
+      </div>
+
+      <!-- Résumé rapide -->
+      <div id="run-detail-stats" class="grid grid-cols-3 gap-1.5 text-center my-2 text-[10px] shrink-0">
+        <!-- Rempli en JS -->
+      </div>
+
+      <!-- Liste des questions/réponses -->
+      <div id="run-detail-questions-list" class="space-y-1.5 overflow-y-auto pr-1 custom-scroll text-xs my-1">
+        <!-- Rempli en JS -->
+      </div>
+
+      <button onclick="closeRunDetail()" class="mt-2 w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-semibold text-xs border border-slate-700 active:scale-95 transition shrink-0">
+        Fermer
+      </button>
+    </div>
+  </div>
+
+  <!-- FIN DE MONDE / VICTOIRE -->
+  <div id="end-dialog" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3.5 hidden">
+    <div class="bg-slate-900 border border-amber-400/80 rounded-3xl p-5 max-w-xs w-full text-center shadow-2xl">
+      <div id="end-icon" class="text-5xl mb-1.5">👑</div>
+      <h3 id="end-title" class="font-bold text-lg text-amber-300 mb-0.5">Donjon Triomphé !</h3>
+      <p id="end-desc" class="text-xs text-slate-300 mb-3.5">Félicitations pour cette belle progression mathématique !</p>
+      
+      <div class="bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800 mb-4 flex justify-around">
+        <div>
+          <div class="text-[10px] text-slate-400">Or gagné</div>
+          <div id="end-gold-gain" class="text-sm font-bold text-amber-400 font-numbers">+10 🪙</div>
+        </div>
+        <div>
+          <div class="text-[10px] text-slate-400">Meilleur Combo</div>
+          <div id="end-max-combo" class="text-sm font-bold text-orange-400 font-numbers">3 🔥</div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="openWorldMenu()" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-xs font-semibold text-slate-200 active:scale-95 transition">
+          Mondes
+        </button>
+        <button onclick="retryCurrentWorld()" class="flex-1 py-2 rounded-xl bg-amber-400 hover:bg-amber-350 text-slate-950 text-xs font-bold active:scale-95 transition">
+          Rejouer ⚔️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GARDE-ROBE DES MAGES -->
+  <div id="shop-dialog" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3.5 hidden">
+    <div class="bg-slate-900 border border-indigo-400/50 rounded-3xl p-4 max-w-xs w-full shadow-2xl">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="font-bold text-sm text-indigo-200">Garde-robe des Mages</h3>
+        <button onclick="toggleShop()" class="text-slate-400 text-sm font-bold px-2 py-0.5 rounded-lg bg-slate-800">✕</button>
+      </div>
+      <p class="text-xs text-slate-400 mb-3">Débloque de nouvelles apparences magiques grâce à tes pièces d'or !</p>
+      
+      <div class="space-y-2">
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🧙‍♀️</span>
+            <div class="text-left">
+              <div class="text-xs font-semibold text-slate-200">Apprentie Mage</div>
+              <div class="text-[10px] text-slate-400">Tenue de départ</div>
+            </div>
+          </div>
+          <button onclick="setAvatar('🧙‍♀️')" id="btn-skin-mage" class="text-[10px] px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold">Équiper</button>
+        </div>
+
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🧝‍♀️</span>
+            <div class="text-left">
+              <div class="text-xs font-semibold text-slate-200">Elfe des Chiffres</div>
+              <div class="text-[10px] text-amber-300 font-medium">15 Pièces</div>
+            </div>
+          </div>
+          <button onclick="buyAvatar('🧝‍♀️', 15)" id="btn-skin-elf" class="text-[10px] px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-350 text-slate-950 font-bold">15 🪙</button>
+        </div>
+
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🐉</span>
+            <div class="text-left">
+              <div class="text-xs font-semibold text-slate-200">Maîtresse Dragon</div>
+              <div class="text-[10px] text-amber-300 font-medium">30 Pièces</div>
+            </div>
+          </div>
+          <button onclick="buyAvatar('🐉', 30)" id="btn-skin-dragon" class="text-[10px] px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-350 text-slate-950 font-bold">30 🪙</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Synthétiseur Audio Web Audio API */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playHit() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(70, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.13);
+      }
+      playCorrect() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.1, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.15);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.16);
+        });
+      }
+      playMistake() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(110, this.ctx.currentTime + 0.22);
+        gain.gain.setValueAtTime(0.16, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.23);
+      }
+      playVictory() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const fanfare = [523.25, 659.25, 783.99, 1046.50];
+        fanfare.forEach((f, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = f;
+          const start = this.ctx.currentTime + (idx * 0.09);
+          gain.gain.setValueAtTime(0.15, start);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(start);
+          osc.stop(start + 0.22);
+        });
+      }
+      playTick() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+      }
+      playAlarm() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(200, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.24);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.25);
+      }
+    }
+    const audio = new SoundEngine();
+
+    /* PERSISTANCE LOCALSTORAGE */
+    const STORAGE_KEY_SAVE = 'math_quest_profile_save';
+    const STORAGE_KEY_RUNS = 'math_quest_last_runs';
+
+    const gameState = {
+      world: 1,
+      playerHP: 3,
+      maxHP: 3,
+      gold: 0,
+      totalWins: 0,
+      streak: 0,
+      maxStreakRound: 0,
+      goldEarnedRound: 0,
+      currentInput: '',
+      currentQuestionText: '',
+      expectedAnswerStr: '',
+      teachingHint: '',
+      monsterMaxHP: 3,
+      monsterHP: 3,
+      monsterLevel: 1,
+      unlockedSkins: ['🧙‍♀️'],
+      activeSkin: '🧙‍♀️',
+      timerInterval: null,
+      timeLimit: 10,
+      timeLeft: 10,
+      questionStartTime: 0,
+      currentRunLog: [] // Enregistre chaque question/réponse du parcours actif
+    };
+
+    function loadProfile() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_SAVE);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (typeof data.gold === 'number') gameState.gold = data.gold;
+          if (typeof data.totalWins === 'number') gameState.totalWins = data.totalWins;
+          if (Array.isArray(data.unlockedSkins)) gameState.unlockedSkins = data.unlockedSkins;
+          if (data.activeSkin) gameState.activeSkin = data.activeSkin;
+        }
+      } catch (e) {
+        console.warn("Impossible de charger le profil", e);
+      }
+      updateSkinButtons();
+    }
+
+    function saveProfile() {
+      try {
+        const data = {
+          gold: gameState.gold,
+          totalWins: gameState.totalWins,
+          unlockedSkins: gameState.unlockedSkins,
+          activeSkin: gameState.activeSkin
+        };
+        localStorage.setItem(STORAGE_KEY_SAVE, JSON.stringify(data));
+      } catch (e) {
+        console.warn("Impossible d'enregistrer le profil", e);
+      }
+    }
+
+    function getSavedRuns() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_RUNS);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveRunRecord(isVictory) {
+      try {
+        const runs = getSavedRuns();
+        const record = {
+          date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+          world: gameState.world,
+          clearedStage: isVictory ? 3 : Math.max(1, gameState.monsterLevel),
+          goldEarned: gameState.goldEarnedRound,
+          bestCombo: gameState.maxStreakRound,
+          victory: isVictory,
+          questionsLog: [...gameState.currentRunLog] // Historique détaillé des questions et réponses
+        };
+
+        runs.unshift(record);
+        if (runs.length > 10) {
+          runs.length = 10;
+        }
+        localStorage.setItem(STORAGE_KEY_RUNS, JSON.stringify(runs));
+      } catch (e) {
+        console.warn("Impossible d'enregistrer le parcours", e);
+      }
+      renderRunsHistory();
+    }
+
+    function renderRunsHistory() {
+      const container = document.getElementById('runs-history-list');
+      if (!container) return;
+
+      const runs = getSavedRuns();
+      if (runs.length === 0) {
+        container.innerHTML = '<div class="text-slate-500 text-center py-2 italic text-[10px]">Aucun parcours enregistré pour l\'instant</div>';
+        return;
+      }
+
+      const worldIcons = { 1: "🌲", 2: "🏰", 3: "🏛️", 4: "🌋", 5: "📜", 6: "⏱️" };
+
+      container.innerHTML = runs.map((r, idx) => `
+        <div onclick="openRunDetail(${idx})" class="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/50 active:scale-[0.99] transition cursor-pointer">
+          <div class="flex items-center gap-1.5">
+            <span>${r.victory ? '👑' : '💀'}</span>
+            <span class="font-medium text-slate-200">${worldIcons[r.world] || '🗺️'} M${r.world} (${r.victory ? 'Conquis' : 'Étape ' + r.clearedStage + '/3'})</span>
+          </div>
+          <div class="flex items-center gap-2 text-slate-400 font-numbers text-[9px] sm:text-[10px]">
+            <span class="text-amber-300 font-bold">+${r.goldEarned} 🪙</span>
+            <span class="text-orange-300">🔥 ${r.bestCombo}</span>
+            <span class="text-slate-500">${r.date}</span>
+            <span class="text-indigo-400 font-bold">›</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openRunDetail(index) {
+      const runs = getSavedRuns();
+      const run = runs[index];
+      if (!run) return;
+
+      const worldNames = {
+        1: "Forêt des Additions",
+        2: "Donjon des Multiplications",
+        3: "Marais des Décimaux",
+        4: "Repaire du Boss",
+        5: "Labyrinthe des Énigmes",
+        6: "L'Arène du Temps"
+      };
+
+      document.getElementById('run-detail-title').innerText = `${run.victory ? '👑 Victoire' : '🛡️ Donjon inachevé'} · Monde ${run.world}`;
+      document.getElementById('run-detail-subtitle').innerText = `${worldNames[run.world] || 'Monde'} · ${run.date}`;
+
+      const totalQuestions = (run.questionsLog || []).length;
+      const correctCount = (run.questionsLog || []).filter(q => q.correct).length;
+
+      document.getElementById('run-detail-stats').innerHTML = `
+        <div class="bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+          <div class="text-slate-400 text-[9px]">Réussite</div>
+          <div class="font-bold text-emerald-400 font-numbers">${correctCount} / ${totalQuestions}</div>
+        </div>
+        <div class="bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+          <div class="text-slate-400 text-[9px]">Or amassé</div>
+          <div class="font-bold text-amber-300 font-numbers">+${run.goldEarned} 🪙</div>
+        </div>
+        <div class="bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+          <div class="text-slate-400 text-[9px]">Meilleur combo</div>
+          <div class="font-bold text-orange-400 font-numbers">${run.bestCombo} 🔥</div>
+        </div>
+      `;
+
+      const listContainer = document.getElementById('run-detail-questions-list');
+      if (!run.questionsLog || run.questionsLog.length === 0) {
+        listContainer.innerHTML = '<div class="text-slate-500 text-center py-4 italic text-xs">Pas de calcul individuel enregistré pour ce parcours ancien.</div>';
+      } else {
+        listContainer.innerHTML = run.questionsLog.map((q, i) => `
+          <div class="p-2 rounded-xl ${q.correct ? 'bg-emerald-950/30 border border-emerald-500/30' : 'bg-rose-950/30 border border-rose-500/30'} flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold text-slate-400 uppercase">Calcul #${i + 1}</span>
+              <span class="text-[10px] font-semibold ${q.correct ? 'text-emerald-400' : 'text-rose-400'}">
+                ${q.correct ? '✓ Réussi' : (q.timeout ? '⏳ Temps écoulé' : '✕ Erreur')}
+              </span>
+            </div>
+            <div class="font-semibold text-slate-200 font-numbers">${q.question}</div>
+            <div class="flex items-center gap-2 text-[11px] mt-0.5">
+              <span class="text-slate-400">Réponse donnée :</span>
+              <strong class="${q.correct ? 'text-emerald-300 font-bold' : 'text-rose-300 line-through'} font-numbers">${q.userAnswer}</strong>
+              ${!q.correct ? `<span class="text-slate-400">Attendu : <strong class="text-emerald-300 font-numbers">${q.expectedAnswer}</strong></span>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('run-detail-modal').classList.remove('hidden');
+    }
+
+    function closeRunDetail() {
+      document.getElementById('run-detail-modal').classList.add('hidden');
+    }
+
+    function clearRunHistory() {
+      try {
+        localStorage.removeItem(STORAGE_KEY_RUNS);
+      } catch (e) {}
+      renderRunsHistory();
+    }
+
+    const worldEnemies = {
+      1: [
+        { name: "Loup Sylvestre", icon: "🐺", hp: 3 },
+        { name: "Gobelin des Bois", icon: "👺", hp: 3 },
+        { name: "Gólem d'Écorce", icon: "🪵", hp: 4 }
+      ],
+      2: [
+        { name: "Gargouille de Pierre", icon: "🦇", hp: 3 },
+        { name: "Chevalier Obscur", icon: "🛡️", hp: 4 },
+        { name: "Minotaure Doré", icon: "🐂", hp: 4 }
+      ],
+      3: [
+        { name: "Spectre Décimal", icon: "👻", hp: 3 },
+        { name: "Sphinx des Nombres", icon: "🦁", hp: 4 },
+        { name: "Ancien Titan", icon: "🗿", hp: 4 }
+      ],
+      4: [
+        { name: "Démon des Flammes", icon: "🔥", hp: 4 },
+        { name: "Sorcier Sombre", icon: "🧙‍♂️", hp: 4 },
+        { name: "Dragon des Nombres", icon: "🐲", hp: 5 }
+      ],
+      5: [
+        { name: "Chouette Érudite", icon: "🦉", hp: 3 },
+        { name: "Génie des Marchands", icon: "🧞‍♂️", hp: 4 },
+        { name: "Sphinx des Mystères", icon: "🧮", hp: 4 }
+      ],
+      6: [
+        { name: "Spectre Chronos", icon: "⏳", hp: 3 },
+        { name: "Gardien des Horloges", icon: "🕰️", hp: 4 },
+        { name: "Maître du Temps", icon: "⚡", hp: 5 }
+      ]
+    };
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateQuestion(worldId) {
+      let q = "";
+      let ans = 0;
+      let hint = "";
+
+      switch (worldId) {
+        case 1: {
+          const type = rand(1, 3);
+          if (type === 1) {
+            const d1 = rand(2, 6) * 10 + 9;
+            const d2 = rand(2, 4) * 10 + rand(3, 8);
+            ans = d1 + d2;
+            q = `${d1} + ${d2}`;
+            hint = `Astuce : Pour faire +${d1}, fais +${d1 + 1} puis retire 1 ! Exemple : (${d1 + 1} + ${d2}) - 1 = ${ans}.`;
+          } else if (type === 2) {
+            const start = rand(21, 89);
+            ans = 100 - start;
+            q = `${start} + ... = 100`;
+            hint = `Astuce pour le complément à 100 : cherche d'abord les unités pour aller à la dizaine supérieure (${10 - (start % 10)}), puis complète à 100 ! Réponse : ${ans}.`;
+          } else {
+            const a = rand(120, 680);
+            ans = 1000 - a;
+            q = `${a} + ... = 1000`;
+            hint = `Complément à 1000 : combien manque-t-il pour atteindre 1000 ? 1000 - ${a} = ${ans}.`;
+          }
+          break;
+        }
+
+        case 2: {
+          const type = rand(1, 3);
+          if (type === 1) {
+            const t = rand(6, 9);
+            const n = rand(4, 9);
+            ans = t * n;
+            q = `${t} × ${n}`;
+            hint = `Table de multiplication : ${t} × ${n} = ${ans}. Pour multiplier par 9 : fais × 10 puis retire le nombre !`;
+          } else if (type === 2) {
+            const sq = rand(6, 12);
+            ans = sq * sq;
+            q = `${sq} × ${sq}`;
+            hint = `Carré parfait : le résultat d'un nombre multiplié par lui-même. ${sq} × ${sq} = ${ans}.`;
+          } else {
+            const a = rand(6, 9);
+            const b = rand(12, 18);
+            ans = a * b;
+            q = `${a} × ${b}`;
+            hint = `Décompose astucieusement : ${a} × ${b} = (${a} × 10) + (${a} × ${b - 10}) = ${a * 10} + ${a * (b - 10)} = ${ans} !`;
+          }
+          break;
+        }
+
+        case 3: {
+          const type = rand(1, 3);
+          if (type === 1) {
+            const intPart = rand(2, 25);
+            const decPart = rand(1, 9);
+            const val = parseFloat(`${intPart}.${decPart}`);
+            ans = Math.round(val * 10 * 10) / 10;
+            q = `${val.toString().replace('.', ',')} × 10`;
+            hint = `Multiplier par 10 décale la virgule d'un rang vers la droite : ${val.toString().replace('.', ',')} × 10 = ${ans} !`;
+          } else if (type === 2) {
+            const a = rand(1, 8) + (rand(1, 9) / 10);
+            const b = rand(1, 5) + (rand(1, 9) / 10);
+            ans = Math.round((a + b) * 10) / 10;
+            q = `${a.toFixed(1).replace('.', ',')} + ${b.toFixed(1).replace('.', ',')}`;
+            hint = `Additionne d'abord les parties entières (${Math.floor(a)} + ${Math.floor(b)} = ${Math.floor(a) + Math.floor(b)}), puis les dixièmes ! Total = ${ans.toString().replace('.', ',')}.`;
+          } else {
+            const n = rand(15, 95) * 10;
+            ans = n / 100;
+            q = `${n} ÷ 100`;
+            hint = `Diviser par 100 décale la virgule de deux rangs vers la gauche : ${n} ÷ 100 = ${ans.toString().replace('.', ',')} !`;
+          }
+          break;
+        }
+
+        case 4: {
+          const type = rand(1, 3);
+          if (type === 1) {
+            const a = rand(12, 48);
+            ans = a * 5;
+            q = `${a} × 5`;
+            hint = `Astuce pour × 5 : multiplie par 10 puis prends la moitié ! (${a} × 10 = ${a * 10}), la moitié fait ${ans}.`;
+          } else if (type === 2) {
+            const a = rand(4, 16) * 2;
+            ans = a * 25;
+            q = `${a} × 25`;
+            hint = `Astuce pour × 25 : multiplie par 100 puis divise par 4 ! (${a} × 100 = ${a * 100}), divisé par 4 donne ${ans}.`;
+          } else {
+            const a = rand(11, 24);
+            ans = a * 11;
+            q = `${a} × 11`;
+            hint = `Astuce pour multiplier par 11 : fais (${a} × 10) + ${a} = ${a * 10} + ${a} = ${ans} !`;
+          }
+          break;
+        }
+
+        case 5: {
+          const pType = rand(1, 5);
+          if (pType === 1) {
+            const cost = rand(14, 38);
+            ans = 50 - cost;
+            q = `Tu paies un livre à ${cost}€ avec un billet de 50€. Combien te rend-on ?`;
+            hint = `Rendu de monnaie : calcule 50 - ${cost} = ${ans}€.`;
+          } else if (pType === 2) {
+            const friends = rand(3, 6);
+            const each = rand(4, 9);
+            ans = each;
+            const total = friends * each;
+            q = `${friends} amies se partagent équitablement ${total} billes. Combien en a chacune ?`;
+            hint = `Partage équitable : divise le total par le nombre d'amies. ${total} ÷ ${friends} = ${ans} billes.`;
+          } else if (pType === 3) {
+            const duration = rand(15, 45);
+            const depH = rand(14, 16);
+            ans = duration;
+            q = `Un cours commence à ${depH}h00 et finit à ${depH}h${duration}. Combien de minutes a-t-il duré ?`;
+            hint = `L'écart de temps entre ${depH}h00 et ${depH}h${duration} est de ${duration} minutes.`;
+          } else if (pType === 4) {
+            const cote = rand(4, 12);
+            ans = cote * 4;
+            q = `Quel est le périmètre d'un carré de ${cote} cm de côté ?`;
+            hint = `Le périmètre d'un carré est égal à 4 × côté = 4 × ${cote} = ${ans} cm.`;
+          } else {
+            const nbItems = rand(2, 4);
+            const unit = 1.5;
+            ans = nbItems * unit;
+            q = `Combien coûtent ${nbItems} viennoiseries à 1,50€ l'unité ?`;
+            hint = `Décompose : ${nbItems} × 1€ = ${nbItems}€, et ${nbItems} × 0,50€ = ${(nbItems * 0.5).toString().replace('.', ',')}€. Total = ${ans.toString().replace('.', ',')}€.`;
+          }
+          break;
+        }
+
+        case 6: {
+          const cType = rand(1, 5);
+          if (cType === 1) {
+            const a = rand(6, 9);
+            const b = rand(6, 9);
+            ans = a * b;
+            q = `${a} × ${b}`;
+            hint = `Réflexe table : ${a} × ${b} = ${ans}.`;
+          } else if (cType === 2) {
+            const val = rand(15, 48);
+            ans = val * 2;
+            q = `Double de ${val}`;
+            hint = `Double d'abord les dizaines (${Math.floor(val / 10) * 10 * 2}) puis les unités (${(val % 10) * 2}) = ${ans}.`;
+          } else if (cType === 3) {
+            const half = rand(12, 45);
+            const n = half * 2;
+            ans = half;
+            q = `Moitié de ${n}`;
+            hint = `La moitié de ${n} est ${half} car ${half} + ${half} = ${n}.`;
+          } else if (cType === 4) {
+            const a = rand(25, 75);
+            ans = 100 - a;
+            q = `${a} + ... = 100`;
+            hint = `Complément réflexe à 100 : 100 - ${a} = ${ans}.`;
+          } else {
+            const a = rand(3, 9) * 10;
+            const b = rand(3, 8);
+            ans = a * b;
+            q = `${a} × ${b}`;
+            hint = `${a / 10} × ${b} = ${(a / 10) * b}, puis rajoute le zéro = ${ans} !`;
+          }
+          break;
+        }
+      }
+
+      return {
+        question: q,
+        answerStr: ans.toString().replace('.', ','),
+        hint: hint
+      };
+    }
+
+    function stopChrono() {
+      if (gameState.timerInterval) {
+        clearInterval(gameState.timerInterval);
+        gameState.timerInterval = null;
+      }
+    }
+
+    function startChrono() {
+      stopChrono();
+      if (gameState.world !== 6) {
+        document.getElementById('chrono-container').classList.add('hidden');
+        return;
+      }
+
+      const chronoBox = document.getElementById('chrono-container');
+      chronoBox.classList.remove('hidden');
+      chronoBox.classList.add('flex');
+
+      gameState.timeLimit = 10;
+      gameState.timeLeft = gameState.timeLimit;
+      gameState.questionStartTime = Date.now();
+      updateChronoDisplay();
+
+      gameState.timerInterval = setInterval(() => {
+        gameState.timeLeft -= 0.1;
+        if (gameState.timeLeft <= 0) {
+          gameState.timeLeft = 0;
+          updateChronoDisplay();
+          stopChrono();
+          handleTimeOut();
+        } else {
+          updateChronoDisplay();
+          if (gameState.timeLeft <= 3.1 && Math.floor(gameState.timeLeft * 10) % 10 === 0) {
+            audio.playTick();
+          }
+        }
+      }, 100);
+    }
+
+    function updateChronoDisplay() {
+      const pct = Math.max(0, (gameState.timeLeft / gameState.timeLimit) * 100);
+      const bar = document.getElementById('chrono-progress-bar');
+      const text = document.getElementById('chrono-seconds-text');
+
+      bar.style.width = pct + '%';
+      text.innerText = Math.ceil(gameState.timeLeft) + 's';
+
+      if (pct > 50) {
+        bar.className = 'h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full transition-all duration-100 ease-linear';
+      } else if (pct > 25) {
+        bar.className = 'h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full transition-all duration-100 ease-linear';
+      } else {
+        bar.className = 'h-full bg-gradient-to-r from-rose-500 to-red-500 rounded-full transition-all duration-100 ease-linear animate-pulse';
+      }
+    }
+
+    function handleTimeOut() {
+      audio.playAlarm();
+      
+      // Enregistrement de l'échec pour cause de temps
+      gameState.currentRunLog.push({
+        question: gameState.currentQuestionText,
+        userAnswer: gameState.currentInput.trim() || '(Aucune réponse)',
+        expectedAnswer: gameState.expectedAnswerStr,
+        correct: false,
+        timeout: true
+      });
+
+      gameState.playerHP -= 1;
+      gameState.streak = 0;
+      updatePlayerStats();
+
+      document.getElementById('explain-question').innerText = gameState.currentQuestionText;
+      document.getElementById('explain-answer').innerText = gameState.expectedAnswerStr;
+      document.getElementById('explain-step-by-step').innerText = "⏳ Temps écoulé ! En mode chrono, tu as 10 secondes par énigme. " + gameState.teachingHint;
+      document.getElementById('explanation-modal').classList.remove('hidden');
+    }
+
+    function launchWorld(worldId) {
+      stopChrono();
+      audio.init();
+      gameState.world = worldId;
+      gameState.monsterLevel = 1;
+      gameState.playerHP = gameState.maxHP;
+      gameState.streak = 0;
+      gameState.maxStreakRound = 0;
+      gameState.goldEarnedRound = 0;
+      gameState.currentRunLog = []; // Réinitialise le journal pour ce nouveau parcours
+
+      document.getElementById('world-select-overlay').classList.add('hidden');
+      setupMonster();
+      updatePlayerStats();
+      loadNextQuestion();
+    }
+
+    function openWorldMenu() {
+      stopChrono();
+      renderRunsHistory();
+      document.getElementById('chrono-container').classList.add('hidden');
+      document.getElementById('end-dialog').classList.add('hidden');
+      document.getElementById('explanation-modal').classList.add('hidden');
+      document.getElementById('run-detail-modal').classList.add('hidden');
+      document.getElementById('menu-total-wins').innerText = gameState.totalWins;
+      document.getElementById('menu-total-coins').innerText = gameState.gold + " 🪙";
+      document.getElementById('world-select-overlay').classList.remove('hidden');
+    }
+
+    function updatePlayerStats() {
+      const heartsContainer = document.getElementById('hearts-container');
+      let heartsHtml = '';
+      for (let i = 0; i < gameState.maxHP; i++) {
+        heartsHtml += `<span class="${i < gameState.playerHP ? 'text-rose-500' : 'text-slate-600'} text-xs">❤️</span>`;
+      }
+      heartsContainer.innerHTML = heartsHtml;
+
+      document.getElementById('gold-display').innerText = gameState.gold;
+
+      const streakBadge = document.getElementById('streak-badge');
+      if (gameState.streak >= 2) {
+        streakBadge.classList.remove('hidden');
+        streakBadge.classList.add('flex');
+        document.getElementById('combo-count').innerText = gameState.streak;
+      } else {
+        streakBadge.classList.add('hidden');
+        streakBadge.classList.remove('flex');
+      }
+
+      const worldNames = {
+        1: { name: "1. Forêt des Additions", icon: "🌲" },
+        2: { name: "2. Donjon des Multiplications", icon: "🏰" },
+        3: { name: "3. Marais des Décimaux", icon: "🏛️" },
+        4: { name: "4. Repaire du Boss", icon: "🌋" },
+        5: { name: "5. Labyrinthe des Énigmes", icon: "📜" },
+        6: { name: "6. L'Arène du Temps", icon: "⏱️" }
+      };
+      document.getElementById('world-title').innerText = worldNames[gameState.world].name;
+      document.getElementById('world-icon').innerText = worldNames[gameState.world].icon;
+
+      document.getElementById('player-avatar').innerText = gameState.activeSkin;
+      const avatarTitles = { '🧙‍♀️': 'Apprentie', '🧝‍♀️': 'Elfe', '🐉': 'Dragon' };
+      document.getElementById('player-title').innerText = avatarTitles[gameState.activeSkin] || 'Héroïne';
+    }
+
+    function setupMonster() {
+      const enemies = worldEnemies[gameState.world];
+      const enemy = enemies[Math.min(gameState.monsterLevel - 1, enemies.length - 1)];
+      gameState.monsterMaxHP = enemy.hp;
+      gameState.monsterHP = enemy.hp;
+
+      document.getElementById('monster-sprite').innerText = enemy.icon;
+      document.getElementById('monster-name').innerText = enemy.name;
+      document.getElementById('monster-level').innerText = gameState.monsterLevel;
+      updateMonsterHPBar();
+    }
+
+    function updateMonsterHPBar() {
+      const pct = Math.max(0, (gameState.monsterHP / gameState.monsterMaxHP) * 100);
+      const bar = document.getElementById('monster-hp-bar');
+      bar.style.width = pct + '%';
+
+      if (pct < 35) {
+        bar.className = 'h-full bg-gradient-to-r from-rose-500 to-rose-400 rounded-full transition-all duration-300';
+      } else {
+        bar.className = 'h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300';
+      }
+      document.getElementById('monster-hp-text').innerText = `${gameState.monsterHP} / ${gameState.monsterMaxHP} PV`;
+    }
+
+    function loadNextQuestion() {
+      const data = generateQuestion(gameState.world);
+      gameState.currentQuestionText = data.question;
+      gameState.expectedAnswerStr = data.answerStr;
+      gameState.teachingHint = data.hint;
+      gameState.currentInput = '';
+
+      const problemEl = document.getElementById('math-problem');
+      const equalSign = document.getElementById('equal-sign');
+      const mathBox = document.getElementById('math-problem-box');
+
+      problemEl.innerText = data.question;
+
+      if (gameState.world === 5) {
+        problemEl.className = 'text-xs sm:text-sm font-semibold text-amber-200 text-center leading-relaxed px-1 line-clamp-3';
+        equalSign.innerText = '👉';
+        mathBox.className = 'w-full flex flex-col sm:flex-row items-center justify-center gap-1.5 text-center';
+      } else {
+        problemEl.className = 'text-2xl font-bold text-white leading-tight px-1 font-numbers';
+        equalSign.innerText = '=';
+        mathBox.className = 'w-full flex items-center justify-center gap-2 text-center';
+      }
+
+      updateAnswerSlot();
+      if (gameState.world === 6) {
+        document.getElementById('coach-hint-quick').innerText = "⚡ Vite ! Réponds avant les 10 secondes !";
+        startChrono();
+      } else {
+        document.getElementById('coach-hint-quick').innerText = gameState.world === 5 ? "Trouve le bon résultat pour résoudre la situation !" : "Trouve la bonne réponse pour porter un coup d'épée !";
+        stopChrono();
+      }
+    }
+
+    function updateAnswerSlot() {
+      const slot = document.getElementById('answer-text');
+      if (gameState.currentInput === '') {
+        slot.innerText = '?';
+        slot.classList.add('text-slate-500');
+        slot.classList.remove('text-amber-300');
+      } else {
+        slot.innerText = gameState.currentInput;
+        slot.classList.remove('text-slate-500');
+        slot.classList.add('text-amber-300');
+      }
+    }
+
+    function handleNumInput(char) {
+      audio.init();
+      if (gameState.currentInput.length >= 6) return;
+      if (char === ',' && gameState.currentInput.includes(',')) return;
+      gameState.currentInput += char;
+      updateAnswerSlot();
+    }
+
+    function handleBackspace() {
+      audio.init();
+      gameState.currentInput = gameState.currentInput.slice(0, -1);
+      updateAnswerSlot();
+    }
+
+    function handleConfirmAnswer() {
+      audio.init();
+      if (gameState.currentInput.trim() === '') return;
+
+      const userVal = gameState.currentInput.trim().replace('.', ',');
+      const targetVal = gameState.expectedAnswerStr;
+
+      if (userVal === targetVal) {
+        handleSuccess();
+      } else {
+        handleMistake();
+      }
+    }
+
+    function handleSuccess() {
+      stopChrono();
+      audio.playCorrect();
+      audio.playHit();
+
+      // Enregistrement de la question réussie
+      gameState.currentRunLog.push({
+        question: gameState.currentQuestionText,
+        userAnswer: gameState.currentInput.trim().replace('.', ','),
+        expectedAnswer: gameState.expectedAnswerStr,
+        correct: true,
+        timeout: false
+      });
+
+      const elapsed = (Date.now() - gameState.questionStartTime) / 1000;
+      let isSpeedBonus = false;
+      if (gameState.world === 6 && elapsed < 3.5) {
+        isSpeedBonus = true;
+        gameState.gold += 1;
+        gameState.goldEarnedRound += 1;
+        saveProfile();
+        const tag = document.getElementById('chrono-bonus-tag');
+        tag.classList.remove('opacity-0');
+        tag.classList.add('opacity-100');
+        setTimeout(() => tag.classList.replace('opacity-100', 'opacity-0'), 800);
+      }
+
+      gameState.monsterHP -= 1;
+      gameState.streak += 1;
+      if (gameState.streak > gameState.maxStreakRound) {
+        gameState.maxStreakRound = gameState.streak;
+      }
+
+      triggerSlashAnimation();
+      const wrapper = document.getElementById('monster-wrapper');
+      wrapper.classList.add('shake');
+      setTimeout(() => wrapper.classList.remove('shake'), 320);
+
+      updateMonsterHPBar();
+      updatePlayerStats();
+
+      document.getElementById('coach-hint-quick').innerText = isSpeedBonus ? "⚡ Super rapide ! Bonus de vitesse +1 🪙 !" : "✨ Bravo, coup réussi !";
+
+      if (gameState.monsterHP <= 0) {
+        setTimeout(handleMonsterDefeat, 400);
+      } else {
+        setTimeout(loadNextQuestion, 550);
+      }
+    }
+
+    function handleMistake() {
+      stopChrono();
+      audio.playMistake();
+
+      // Enregistrement de l'erreur avec la réponse donnée
+      gameState.currentRunLog.push({
+        question: gameState.currentQuestionText,
+        userAnswer: gameState.currentInput.trim().replace('.', ','),
+        expectedAnswer: gameState.expectedAnswerStr,
+        correct: false,
+        timeout: false
+      });
+
+      gameState.playerHP -= 1;
+      gameState.streak = 0;
+      updatePlayerStats();
+
+      document.getElementById('explain-question').innerText = gameState.currentQuestionText;
+      document.getElementById('explain-answer').innerText = gameState.expectedAnswerStr;
+      document.getElementById('explain-step-by-step').innerText = gameState.teachingHint;
+      document.getElementById('explanation-modal').classList.remove('hidden');
+    }
+
+    function closeExplanation() {
+      document.getElementById('explanation-modal').classList.add('hidden');
+      gameState.currentInput = '';
+      updateAnswerSlot();
+
+      if (gameState.playerHP <= 0) {
+        showEndDialog(false);
+      } else {
+        loadNextQuestion();
+      }
+    }
+
+    function triggerSlashAnimation() {
+      const layer = document.getElementById('fx-layer');
+      const slash = document.createElement('div');
+      slash.className = 'text-4xl text-amber-300 font-bold drop-shadow-[0_0_12px_rgba(245,158,11,0.8)] animate-ping';
+      slash.innerText = '⚡⚔️';
+      layer.appendChild(slash);
+      setTimeout(() => slash.remove(), 380);
+    }
+
+    function handleMonsterDefeat() {
+      audio.playVictory();
+      const gain = 2 + gameState.world;
+      gameState.gold += gain;
+      gameState.goldEarnedRound += gain;
+      gameState.totalWins += 1;
+      saveProfile();
+      updatePlayerStats();
+
+      if (gameState.monsterLevel < 3) {
+        gameState.monsterLevel += 1;
+        setupMonster();
+        loadNextQuestion();
+      } else {
+        showEndDialog(true);
+      }
+    }
+
+    function showEndDialog(isVictory) {
+      stopChrono();
+      saveRunRecord(isVictory);
+      saveProfile();
+
+      const dialog = document.getElementById('end-dialog');
+      const icon = document.getElementById('end-icon');
+      const title = document.getElementById('end-title');
+      const desc = document.getElementById('end-desc');
+
+      if (isVictory) {
+        icon.innerText = '👑';
+        title.innerText = 'Monde Conquis !';
+        title.className = 'font-bold text-lg text-amber-300 mb-0.5';
+        desc.innerText = gameState.world === 6 ? "Incroyable ! Tu as vaincu le Maître du Temps avec une rapidité exemplaire !" : 'Félicitations aventurière ! Les monstres de ce donjon sont vaincus !';
+      } else {
+        icon.innerText = '🛡️';
+        title.innerText = 'Partie Terminée';
+        title.className = 'font-bold text-lg text-rose-400 mb-0.5';
+        desc.innerText = "Tes cœurs sont épuisés, mais chaque essai te prépare pour réussir en 6ème !";
+      }
+
+      document.getElementById('end-gold-gain').innerText = `+${gameState.goldEarnedRound} 🪙`;
+      document.getElementById('end-max-combo').innerText = `${gameState.maxStreakRound} 🔥`;
+      dialog.classList.remove('hidden');
+    }
+
+    function retryCurrentWorld() {
+      document.getElementById('end-dialog').classList.add('hidden');
+      launchWorld(gameState.world);
+    }
+
+    function pokeMonster() {
+      audio.playHit();
+      const wrapper = document.getElementById('monster-wrapper');
+      wrapper.classList.add('shake');
+      setTimeout(() => wrapper.classList.remove('shake'), 320);
+    }
+
+    function toggleAudio() {
+      audio.init();
+      audio.enabled = !audio.enabled;
+      document.getElementById('audio-toggle-btn').innerText = audio.enabled ? '🔊' : '🔇';
+    }
+
+    function toggleShop() {
+      const shop = document.getElementById('shop-dialog');
+      updateSkinButtons();
+      shop.classList.toggle('hidden');
+    }
+
+    function updateSkinButtons() {
+      const btnMage = document.getElementById('btn-skin-mage');
+      const btnElf = document.getElementById('btn-skin-elf');
+      const btnDragon = document.getElementById('btn-skin-dragon');
+
+      if (btnMage) {
+        btnMage.innerText = gameState.activeSkin === '🧙‍♀️' ? 'Équipé ✓' : 'Équiper';
+        btnMage.className = gameState.activeSkin === '🧙‍♀️' 
+          ? 'text-[10px] px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold' 
+          : 'text-[10px] px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold';
+      }
+
+      if (btnElf) {
+        if (gameState.unlockedSkins.includes('🧝‍♀️')) {
+          btnElf.innerText = gameState.activeSkin === '🧝‍♀️' ? 'Équipé ✓' : 'Équiper';
+          btnElf.className = gameState.activeSkin === '🧝‍♀️'
+            ? 'text-[10px] px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold'
+            : 'text-[10px] px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold';
+        } else {
+          btnElf.innerText = '15 🪙';
+          btnElf.className = 'text-[10px] px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-350 text-slate-950 font-bold';
+        }
+      }
+
+      if (btnDragon) {
+        if (gameState.unlockedSkins.includes('🐉')) {
+          btnDragon.innerText = gameState.activeSkin === '🐉' ? 'Équipé ✓' : 'Équiper';
+          btnDragon.className = gameState.activeSkin === '🐉'
+            ? 'text-[10px] px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold'
+            : 'text-[10px] px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold';
+        } else {
+          btnDragon.innerText = '30 🪙';
+          btnDragon.className = 'text-[10px] px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-350 text-slate-950 font-bold';
+        }
+      }
+    }
+
+    function setAvatar(emoji) {
+      gameState.activeSkin = emoji;
+      saveProfile();
+      updatePlayerStats();
+      toggleShop();
+    }
+
+    function buyAvatar(emoji, price) {
+      if (gameState.unlockedSkins.includes(emoji)) {
+        setAvatar(emoji);
+        return;
+      }
+      if (gameState.gold >= price) {
+        gameState.gold -= price;
+        gameState.unlockedSkins.push(emoji);
+        gameState.activeSkin = emoji;
+        saveProfile();
+        updatePlayerStats();
+        toggleShop();
+      } else {
+        const btn = emoji === '🧝‍♀️' ? document.getElementById('btn-skin-elf') : document.getElementById('btn-skin-dragon');
+        const oldText = btn.innerText;
+        btn.innerText = 'Pas assez 🪙';
+        setTimeout(() => btn.innerText = oldText, 900);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      loadProfile();
+      updatePlayerStats();
+      renderRunsHistory();
+      openWorldMenu();
+    });
+  </script>
+</body>
+</html>
