@@ -128,7 +128,7 @@
       color: #64748b !important;
     }
 
-    /* Clavier Ultra Réactif */
+    /* Clavier */
     .keyboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -232,7 +232,7 @@
 </head>
 <body>
 
-  <!-- BARRE DU JOUEUR -->
+  <!-- BARRE JOUEUR -->
   <header class="panel header-bar">
     <div style="display:flex; align-items:center; gap:8px;">
       <button onclick="toggleShop()" class="badge-btn" style="background:#1e1b4b; border-color:rgba(99,102,241,0.4); color:#e0e7ff;">
@@ -258,7 +258,7 @@
     </div>
   </header>
 
-  <!-- MONDE ET COMBO -->
+  <!-- SOUS-BARRE MONDE -->
   <div class="panel sub-bar" style="background:transparent; border:none; max-width:420px;">
     <button onclick="openWorldMenu()" class="badge-btn" style="background:#1e293b; border-color:#334155; color:#e2e8f0;">
       <span id="world-icon">🌲</span>
@@ -281,7 +281,7 @@
     </div>
   </div>
 
-  <!-- MONSTRE -->
+  <!-- ARENA DU MONSTRE -->
   <section style="width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center; position:relative;">
     <div id="monster-wrapper" style="display:flex; flex-direction:column; align-items:center;">
       <div id="monster-sprite" class="monster-idle" style="font-size:54px; cursor:pointer;" onclick="pokeMonster()">🐺</div>
@@ -312,7 +312,7 @@
     </div>
   </section>
 
-  <!-- CLAVIER NUMERIQUE -->
+  <!-- CLAVIER -->
   <section style="width:100%; display:flex; flex-direction:column; align-items:center;">
     <div class="keyboard-grid">
       <button class="key-btn font-num" data-k="1">1</button>
@@ -337,7 +337,7 @@
     </button>
   </section>
 
-  <!-- MODALE EXPLICATION -->
+  <!-- MODALE EXPLICATION DU MAGE -->
   <div id="explanation-modal" class="modal-overlay hidden">
     <div class="panel" style="max-width:340px; padding:16px; text-align:center; border-color:rgba(251,191,36,0.6);">
       <div style="font-size:32px; margin-bottom:4px;">🧙‍♂️</div>
@@ -382,7 +382,7 @@
             <span style="font-size:22px;">🌲</span>
             <div>
               <div style="font-size:12px; color:#6ee7b7; font-weight:700;">Niveau 1 · Forêt des Additions</div>
-              <div style="font-size:10px; color:#cbd5e1;">Additions, compléments 100 et 1000</div>
+              <div style="font-size:10px; color:#cbd5e1;">Additions, soustractions & compléments</div>
             </div>
           </div>
           <span style="font-size:10px; background:#065f46; color:#a7f3d0; padding:2px 6px; border-radius:6px;">Jouer</span>
@@ -392,8 +392,8 @@
           <div style="display:flex; align-items:center; gap:8px; text-align:left;">
             <span style="font-size:22px;">🏰</span>
             <div>
-              <div style="font-size:12px; color:#fde047; font-weight:700;">Niveau 2 · Donjon Multiplications</div>
-              <div style="font-size:10px; color:#cbd5e1;">Tables 6 à 9, carrés parfaits</div>
+              <div style="font-size:12px; color:#fde047; font-weight:700;">Niveau 2 · Donjon des Multiplications</div>
+              <div style="font-size:10px; color:#cbd5e1;">Tables, carrés parfaits & divisions</div>
             </div>
           </div>
           <span style="font-size:10px; background:#78350f; color:#fef08a; padding:2px 6px; border-radius:6px;">Jouer</span>
@@ -404,7 +404,7 @@
             <span style="font-size:22px;">🏛️</span>
             <div>
               <div style="font-size:12px; color:#67e8f9; font-weight:700;">Niveau 3 · Marais des Décimaux</div>
-              <div style="font-size:10px; color:#cbd5e1;">Virgules, × 10 et ÷ 100</div>
+              <div style="font-size:10px; color:#cbd5e1;">Virgules, compléments à 1 & mesures</div>
             </div>
           </div>
           <span style="font-size:10px; background:#155e75; color:#a5f3fc; padding:2px 6px; border-radius:6px;">Jouer</span>
@@ -415,7 +415,7 @@
             <span style="font-size:22px;">🌋</span>
             <div>
               <div style="font-size:12px; color:#fda4af; font-weight:700;">Niveau 4 · Repaire du Boss</div>
-              <div style="font-size:10px; color:#cbd5e1;">Astuces rapides × 5, × 11 et × 25</div>
+              <div style="font-size:10px; color:#cbd5e1;">Astuces expertes : × 5, × 11, × 25, × 50</div>
             </div>
           </div>
           <span style="font-size:10px; background:#9f1239; color:#fecdd3; padding:2px 6px; border-radius:6px;">Jouer</span>
@@ -426,7 +426,7 @@
             <span style="font-size:22px;">📜</span>
             <div>
               <div style="font-size:12px; color:#d8b4fe; font-weight:700;">Niveau 5 · Labyrinthe des Énigmes</div>
-              <div style="font-size:10px; color:#cbd5e1;">Monnaie, partages, durées</div>
+              <div style="font-size:10px; color:#cbd5e1;">Promos, heures, partages, périmètres & aires</div>
             </div>
           </div>
           <span style="font-size:10px; background:#6b21a8; color:#f3e8ff; padding:2px 6px; border-radius:6px;">Quête</span>
@@ -437,17 +437,17 @@
             <span style="font-size:22px;">⏱️</span>
             <div>
               <div style="font-size:12px; color:#fde047; font-weight:800;">Niveau 6 · L'Arène du Temps</div>
-              <div style="font-size:10px; color:#fef08a;">10s max par calcul ! Tables réflexes</div>
+              <div style="font-size:10px; color:#fef08a;">10s max ! Doubles, quadruples & réflexes</div>
             </div>
           </div>
           <span style="font-size:10px; background:linear-gradient(to right, #fbbf24, #f97316); color:#020617; font-weight:800; padding:3px 8px; border-radius:6px;">DÉFI ⚡</span>
         </button>
       </div>
 
-      <!-- Historique 10 parcours -->
+      <!-- Historique des 10 parcours -->
       <div style="margin-top:8px; padding:8px; border-radius:12px; background:#020617; border:1px solid #1e293b;">
         <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#cbd5e1; margin-bottom:4px;">
-          <span>📜 10 derniers parcours (touche pour voir)</span>
+          <span>📜 10 derniers parcours (touche pour le détail)</span>
           <button onclick="clearRunHistory()" style="color:#f43f5e; background:transparent; border:none; font-size:10px; cursor:pointer;">Effacer</button>
         </div>
         <div id="runs-history-list" class="custom-scroll" style="display:flex; flex-direction:column; gap:4px; max-height:86px; overflow-y:auto; padding-right:2px;"></div>
@@ -460,7 +460,7 @@
     </div>
   </div>
 
-  <!-- POP-UP DETAIL PARCOURS -->
+  <!-- POP-UP DÉTAIL PARCOURS -->
   <div id="run-detail-modal" class="modal-overlay hidden">
     <div class="panel" style="max-width:340px; max-height:90dvh; padding:14px; display:flex; flex-direction:column; border-color:#6366f1;">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:6px;">
@@ -530,7 +530,7 @@
   </div>
 
   <script>
-    /* Moteur Audio allégé */
+    /* Moteur Audio Léger */
     class SoundEngine {
       constructor() {
         this.ctx = null;
@@ -681,7 +681,7 @@
       currentRunLog: []
     };
 
-    /* Références DOM en cache */
+    /* Cache DOM */
     const DOM = {};
     function cacheDOM() {
       DOM.answerText = document.getElementById('answer-text');
@@ -859,150 +859,264 @@
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /* BANQUE DE QUESTIONS ÉTENDUE ET VARIÉE (CM2 / 6ème) */
     function generateQuestion(worldId) {
       let q = "", ans = 0, hint = "";
+
       switch (worldId) {
-        case 1: {
-          const type = rand(1, 3);
-          if (type === 1) {
-            const d1 = rand(2, 6) * 10 + 9, d2 = rand(2, 4) * 10 + rand(3, 8);
+        case 1: { // Forêt des Additions & Soustractions
+          const type = rand(1, 6);
+          if (type === 1) { // Additions avec 9 ou 8 (astuce +10 -1)
+            const d1 = rand(2, 6) * 10 + 9;
+            const d2 = rand(2, 4) * 10 + rand(3, 8);
             ans = d1 + d2;
             q = `${d1} + ${d2}`;
-            hint = `Astuce : Fais (${d1 + 1} + ${d2}) - 1 = ${ans}.`;
-          } else if (type === 2) {
+            hint = `Ajouter ${d1} revient à ajouter ${d1 + 1} puis à retirer 1 : (${d1 + 1} + ${d2}) - 1 = ${ans}.`;
+          } else if (type === 2) { // Compléments à 100
             const start = rand(21, 89);
             ans = 100 - start;
             q = `${start} + ... = 100`;
-            hint = `Complément à 100 : 100 - ${start} = ${ans}.`;
-          } else {
-            const a = rand(120, 680);
+            hint = `Complément à 100 : va à la dizaine suivante (+${10 - (start % 10)}), puis à 100 (+${Math.floor((100 - start) / 10) * 10}) = ${ans}.`;
+          } else if (type === 3) { // Compléments à 1000
+            const a = rand(12, 88) * 10;
             ans = 1000 - a;
             q = `${a} + ... = 1000`;
             hint = `Complément à 1000 : 1000 - ${a} = ${ans}.`;
+          } else if (type === 4) { // Soustraction astucieuse avec 9 ou 8 (retirer la dizaine supérieure)
+            const total = rand(55, 98);
+            const sub = rand(1, 3) * 10 + 9; // 19, 29 ou 39
+            ans = total - sub;
+            q = `${total} - ${sub}`;
+            hint = `Pour soustraire ${sub}, soustrais ${sub + 1} puis rajoute 1 ! (${total} - ${sub + 1}) + 1 = ${ans}.`;
+          } else if (type === 5) { // Somme de 3 nombres (regroupement malin)
+            const aUnits = rand(1, 9);
+            const bUnits = 10 - aUnits;
+            const cUnits = rand(2, 7);
+            const a = rand(1, 4) * 10 + aUnits;
+            const b = rand(1, 3) * 10 + bUnits;
+            const c = rand(1, 3) * 10 + cUnits;
+            ans = a + b + c;
+            q = `${a} + ${b} + ${c}`;
+            hint = `Regroupe les compléments à 10 : ${a} + ${b} = ${a + b}, puis ajoute ${c} = ${ans} !`;
+          } else { // Complément à 10 000
+            const base = rand(2, 8) * 1000 + rand(1, 9) * 100;
+            ans = 10000 - base;
+            q = `${base} + ... = 10 000`;
+            hint = `Pour atteindre 10 000 : 10 000 - ${base} = ${ans}.`;
           }
           break;
         }
-        case 2: {
-          const type = rand(1, 3);
-          if (type === 1) {
-            const t = rand(6, 9), n = rand(4, 9);
+
+        case 2: { // Donjon des Multiplications & Divisions
+          const type = rand(1, 6);
+          if (type === 1) { // Tables de 6 à 9
+            const t = rand(6, 9), n = rand(6, 9);
             ans = t * n;
             q = `${t} × ${n}`;
             hint = `Table réflexe : ${t} × ${n} = ${ans}.`;
-          } else if (type === 2) {
-            const sq = rand(6, 12);
+          } else if (type === 2) { // Carrés parfaits (jusqu'à 15)
+            const sq = rand(6, 15);
             ans = sq * sq;
             q = `${sq} × ${sq}`;
-            hint = `Carré parfait : ${sq} × ${sq} = ${ans}.`;
-          } else {
-            const a = rand(6, 9), b = rand(12, 18);
+            hint = `Carré parfait : le nombre multiplié par lui-même. ${sq} × ${sq} = ${ans}.`;
+          } else if (type === 3) { // Multiplications par dizaines entières
+            const a = rand(2, 6) * 10;
+            const b = rand(3, 7) * 10;
             ans = a * b;
             q = `${a} × ${b}`;
-            hint = `Décompose : (${a} × 10) + (${a} × ${b - 10}) = ${ans}.`;
+            hint = `Multiplie les chiffres non nuls (${a / 10} × ${b / 10} = ${(a / 10) * (b / 10)}), puis ajoute les 2 zéros = ${ans} !`;
+          } else if (type === 4) { // Divisions exactes (inverses de tables)
+            const div = rand(6, 9);
+            ans = rand(4, 9);
+            const mult = div * ans;
+            q = `${mult} ÷ ${div}`;
+            hint = `Division : cherche dans la table de ${div} : ${div} × ${ans} = ${mult}.`;
+          } else if (type === 5) { // Multiplication par 12 à 15 (décomposition)
+            const a = rand(4, 8);
+            const b = rand(12, 15);
+            ans = a * b;
+            q = `${a} × ${b}`;
+            hint = `Décompose : (${a} × 10) + (${a} × ${b - 10}) = ${a * 10} + ${a * (b - 10)} = ${ans} !`;
+          } else { // Moitiés et tiers de nombres ronds
+            const mult = rand(2, 3);
+            ans = rand(12, 45) * 10;
+            const total = ans * mult;
+            q = `${mult === 2 ? 'La moitié' : 'Le tiers'} de ${total}`;
+            hint = `${mult === 2 ? 'Divise par 2' : 'Divise par 3'} : ${total} ÷ ${mult} = ${ans}.`;
           }
           break;
         }
-        case 3: {
-          const type = rand(1, 3);
-          if (type === 1) {
-            const val = parseFloat(`${rand(2, 25)}.${rand(1, 9)}`);
-            ans = Math.round(val * 10 * 10) / 10;
-            q = `${val.toString().replace('.', ',')} × 10`;
-            hint = `Décale la virgule d'un rang à droite = ${ans}.`;
-          } else if (type === 2) {
-            const a = rand(1, 8) + (rand(1, 9) / 10), b = rand(1, 5) + (rand(1, 9) / 10);
+
+        case 3: { // Marais des Décimaux
+          const type = rand(1, 6);
+          if (type === 1) { // × 10, × 100
+            const intP = rand(1, 35);
+            const decP = rand(1, 9);
+            const is100 = rand(0, 1) === 1;
+            const val = parseFloat(`${intP}.${decP}`);
+            ans = is100 ? Math.round(val * 100) : Math.round(val * 10 * 10) / 10;
+            q = `${val.toString().replace('.', ',')} × ${is100 ? 100 : 10}`;
+            hint = `Multiplier par ${is100 ? 100 : 10} décale la virgule de ${is100 ? '2 rangs' : '1 rang'} vers la droite = ${ans.toString().replace('.', ',')}.`;
+          } else if (type === 2) { // Somme de décimaux
+            const a = rand(1, 9) + rand(1, 9) / 10;
+            const b = rand(1, 9) + rand(1, 9) / 10;
             ans = Math.round((a + b) * 10) / 10;
             q = `${a.toFixed(1).replace('.', ',')} + ${b.toFixed(1).replace('.', ',')}`;
-            hint = `Additionne entiers puis dixièmes = ${ans.toString().replace('.', ',')}.`;
-          } else {
-            const n = rand(15, 95) * 10;
-            ans = n / 100;
-            q = `${n} ÷ 100`;
-            hint = `Décale la virgule de 2 rangs à gauche = ${ans.toString().replace('.', ',')}.`;
+            hint = `Additionne les parties entières (${Math.floor(a)} + ${Math.floor(b)}) puis les dixièmes = ${ans.toString().replace('.', ',')}.`;
+          } else if (type === 3) { // Complément à l'unité supérieure (ex: 0,3 + ... = 1 ou 3,4 + ... = 4)
+            const baseInt = rand(0, 5);
+            const tenths = rand(1, 9);
+            const current = parseFloat(`${baseInt}.${tenths}`);
+            const target = baseInt + 1;
+            ans = Math.round((target - current) * 10) / 10;
+            q = `${current.toString().replace('.', ',')} + ... = ${target}`;
+            hint = `Combien de dixièmes manquent pour faire une unité ? Il manque ${10 - tenths} dixièmes, soit ${ans.toString().replace('.', ',')} !`;
+          } else if (type === 4) { // Soustraction Entier - Décimal (ex: 5 - 1,4 = 3,6)
+            const integerVal = rand(3, 10);
+            const sub = rand(1, integerVal - 2) + rand(1, 9) / 10;
+            ans = Math.round((integerVal - sub) * 10) / 10;
+            q = `${integerVal} - ${sub.toFixed(1).replace('.', ',')}`;
+            hint = `Retire d'abord l'entier (${integerVal} - ${Math.floor(sub)} = ${integerVal - Math.floor(sub)}), puis les dixièmes : - 0,${Math.round((sub % 1) * 10)} = ${ans.toString().replace('.', ',')} !`;
+          } else if (type === 5) { // ÷ 10 et ÷ 100
+            const n = rand(12, 98) * 10;
+            const is100 = rand(0, 1) === 1;
+            ans = is100 ? Math.round((n / 100) * 10) / 10 : n / 10;
+            q = `${n} ÷ ${is100 ? 100 : 10}`;
+            hint = `Diviser par ${is100 ? 100 : 10} décale la virgule de ${is100 ? '2 rangs' : '1 rang'} vers la gauche = ${ans.toString().replace('.', ',')}.`;
+          } else { // Conversion d'unités de mesure (m en cm, kg en g)
+            const m = rand(1, 8) + (rand(1, 9) / 10);
+            ans = Math.round(m * 100);
+            q = `${m.toString().replace('.', ',')} m = ... cm`;
+            hint = `1 m = 100 cm ! Multiplie par 100 en décalant la virgule de 2 rangs : ${m.toString().replace('.', ',')} m = ${ans} cm.`;
           }
           break;
         }
-        case 4: {
-          const type = rand(1, 3);
-          if (type === 1) {
-            const a = rand(12, 48);
+
+        case 4: { // Repaire du Boss : Astuces Expertes
+          const type = rand(1, 6);
+          if (type === 1) { // × 5 (faire × 10 puis ÷ 2)
+            const a = rand(12, 68);
             ans = a * 5;
             q = `${a} × 5`;
-            hint = `Multiplie par 10 puis divise par 2 : (${a * 10} / 2) = ${ans}.`;
-          } else if (type === 2) {
-            const a = rand(4, 16) * 2;
+            hint = `Astuce × 5 : multiplie par 10 (${a * 10}) puis prends la moitié = ${ans}.`;
+          } else if (type === 2) { // × 25 (faire × 100 puis ÷ 4)
+            const a = rand(4, 24) * 2;
             ans = a * 25;
             q = `${a} × 25`;
-            hint = `Multiplie par 100 puis divise par 4 : (${a * 100} / 4) = ${ans}.`;
-          } else {
-            const a = rand(11, 24);
+            hint = `Astuce × 25 : multiplie par 100 (${a * 100}) puis divise par 4 = ${ans}.`;
+          } else if (type === 3) { // × 11
+            const a = rand(11, 45);
             ans = a * 11;
             q = `${a} × 11`;
-            hint = `Fais (${a} × 10) + ${a} = ${ans}.`;
+            hint = `Astuce × 11 : fais (${a} × 10) + ${a} = ${a * 10} + ${a} = ${ans} !`;
+          } else if (type === 4) { // × 50 (faire × 100 puis ÷ 2)
+            const a = rand(6, 44) * 2; // pair
+            ans = a * 50;
+            q = `${a} × 50`;
+            hint = `Astuce × 50 : multiplie par 100 (${a * 100}) puis prends la moitié = ${ans} !`;
+          } else if (type === 5) { // × 9 (faire × 10 - le nombre)
+            const a = rand(12, 42);
+            ans = a * 9;
+            q = `${a} × 9`;
+            hint = `Astuce × 9 : fais (${a} × 10) - ${a} = ${a * 10} - ${a} = ${ans} !`;
+          } else { // Multiplier par 0,5 (prendre la moitié)
+            const a = rand(14, 88) * 2; // nombre pair
+            ans = a / 2;
+            q = `${a} × 0,5`;
+            hint = `Multiplier par 0,5 revient toujours à diviser par 2 ! La moitié de ${a} est ${ans}.`;
           }
           break;
         }
-        case 5: {
-          const pType = rand(1, 5);
-          if (pType === 1) {
-            const cost = rand(14, 38);
+
+        case 5: { // Labyrinthe des Énigmes
+          const pType = rand(1, 6);
+          if (pType === 1) { // Rendu de monnaie
+            const cost = rand(12, 43);
             ans = 50 - cost;
-            q = `Tu paies ${cost}€ avec un billet de 50€. Rendu ?`;
+            q = `Livre à ${cost}€ payé avec un billet de 50€. Rendu ?`;
             hint = `50 - ${cost} = ${ans}€.`;
-          } else if (pType === 2) {
-            const friends = rand(3, 6), each = rand(4, 9);
+          } else if (pType === 2) { // Partage équitable
+            const friends = rand(3, 7);
+            const each = rand(5, 9);
             ans = each;
-            q = `${friends} amies partagent ${friends * each} billes. Part ?`;
-            hint = `${friends * each} ÷ ${friends} = ${ans}.`;
-          } else if (pType === 3) {
-            const duration = rand(15, 45), depH = rand(14, 16);
-            ans = duration;
-            q = `Départ ${depH}h00, fin ${depH}h${duration}. Durée (min) ?`;
-            hint = `${duration} minutes.`;
-          } else if (pType === 4) {
-            const cote = rand(4, 12);
-            ans = cote * 4;
-            q = `Périmètre d'un carré de côté ${cote} cm ?`;
-            hint = `4 × ${cote} = ${ans} cm.`;
-          } else {
-            const nb = rand(2, 4);
-            ans = nb * 1.5;
-            q = `Prix de ${nb} gâteaux à 1,50€ l'unité ?`;
-            hint = `${nb} × 1,50€ = ${ans.toString().replace('.', ',')}€.`;
+            q = `${friends} enfants partagent ${friends * each} cartes. Part de chacun ?`;
+            hint = `${friends * each} ÷ ${friends} = ${ans} cartes.`;
+          } else if (pType === 3) { // Écart horaire (avec retenue)
+            const startM = rand(15, 45);
+            const dur = rand(20, 50);
+            ans = dur;
+            const endM = (startM + dur) % 60;
+            const depH = 14;
+            const arrH = startM + dur >= 60 ? depH + 1 : depH;
+            const endStr = `${arrH}h${endM < 10 ? '0' + endM : endM}`;
+            q = `Départ à ${depH}h${startM}, arrivée à ${endStr}. Durée (minutes) ?`;
+            hint = `Calcule le temps jusqu'à l'heure pleine (${60 - startM} min) puis ajoute le reste (${endM} min) = ${ans} minutes.`;
+          } else if (pType === 4) { // Aire d'un rectangle
+            const L = rand(6, 12);
+            const l = rand(3, 6);
+            ans = L * l;
+            q = `Aire d'un rectangle de longueur ${L} cm et largeur ${l} cm ?`;
+            hint = `Aire = Longueur × largeur = ${L} × ${l} = ${ans} cm².`;
+          } else if (pType === 5) { // Réduction / Pourcentage (50% ou 10%)
+            const isHalf = rand(0, 1) === 1;
+            if (isHalf) {
+              const price = rand(12, 60) * 2;
+              ans = price / 2;
+              q = `Un manteau à ${price}€ a une réduction de 50%. Nouveau prix ?`;
+              hint = `50% correspond à la moitié ! ${price} ÷ 2 = ${ans}€.`;
+            } else {
+              const price = rand(2, 9) * 10;
+              ans = price - (price / 10);
+              q = `Un jeu à ${price}€ a une réduction de 10%. Nouveau prix ?`;
+              hint = `10% de ${price}€ fait ${price / 10}€. Nouveau prix : ${price} - ${price / 10} = ${ans}€.`;
+            }
+          } else { // Prix au lot
+            const nbItems = rand(3, 5);
+            const unitPrice = rand(2, 4);
+            ans = nbItems * unitPrice;
+            q = `Combien coûtent ${nbItems} cahiers à ${unitPrice}€ l'unité ?`;
+            hint = `${nbItems} × ${unitPrice}€ = ${ans}€.`;
           }
           break;
         }
-        case 6: {
-          const cType = rand(1, 5);
-          if (cType === 1) {
+
+        case 6: { // L'Arène du Temps (Réflexes rapides)
+          const cType = rand(1, 6);
+          if (cType === 1) { // Table pure
             const a = rand(6, 9), b = rand(6, 9);
             ans = a * b;
             q = `${a} × ${b}`;
-            hint = `${a} × ${b} = ${ans}.`;
-          } else if (cType === 2) {
-            const val = rand(15, 48);
+            hint = `Réflexe : ${a} × ${b} = ${ans}.`;
+          } else if (cType === 2) { // Double
+            const val = rand(16, 49);
             ans = val * 2;
             q = `Double de ${val}`;
-            hint = `Double de ${val} = ${ans}.`;
-          } else if (cType === 3) {
-            const half = rand(12, 45);
+            hint = `Double les dizaines (${Math.floor(val / 10) * 20}) et unités (${(val % 10) * 2}) = ${ans}.`;
+          } else if (cType === 3) { // Moitié
+            const half = rand(14, 48);
             ans = half;
             q = `Moitié de ${half * 2}`;
-            hint = `Moitié = ${half}.`;
-          } else if (cType === 4) {
-            const a = rand(25, 75);
-            ans = 100 - a;
-            q = `${a} + ... = 100`;
-            hint = `100 - ${a} = ${ans}.`;
-          } else {
-            const a = rand(3, 9) * 10, b = rand(3, 8);
-            ans = a * b;
-            q = `${a} × ${b}`;
-            hint = `${a / 10} × ${b} = ${(a / 10) * b} -> ${ans}.`;
+            hint = `La moitié de ${half * 2} est ${half}.`;
+          } else if (cType === 4) { // Quadruple (x4 = doubler deux fois)
+            const val = rand(11, 24);
+            ans = val * 4;
+            q = `Quadruple de ${val}`;
+            hint = `Double deux fois : le double de ${val} est ${val * 2}, et le double de ${val * 2} est ${ans} !`;
+          } else if (cType === 5) { // Complément à 60 (réflexe minutes / horloge)
+            const a = rand(15, 55);
+            ans = 60 - a;
+            q = `${a} + ... = 60`;
+            hint = `Complément à 60 : 60 - ${a} = ${ans}.`;
+          } else { // Multiplication par 100
+            const a = rand(12, 85);
+            ans = a * 100;
+            q = `${a} × 100`;
+            hint = `Ajoute simplement deux zéros : ${a} × 100 = ${ans}.`;
           }
           break;
         }
       }
+
       return { question: q, answerStr: ans.toString().replace('.', ','), hint };
     }
 
@@ -1165,7 +1279,7 @@
 
       DOM.mathProblem.innerText = data.question;
       if (gameState.world === 5) {
-        DOM.mathProblem.style.fontSize = '14px';
+        DOM.mathProblem.style.fontSize = '13px';
         DOM.equalSign.innerText = '👉';
       } else {
         DOM.mathProblem.style.fontSize = '24px';
@@ -1183,7 +1297,6 @@
       }
     }
 
-    /* Mise à jour ultra-rapide de la case réponse sans recréer le DOM */
     function updateAnswerSlot() {
       if (gameState.currentInput === '') {
         DOM.answerText.textContent = '?';
@@ -1422,7 +1535,7 @@
       }
     }
 
-    /* Écouteurs d'événements tactiles haute performance (zéro latence) */
+    /* Événements tactiles réactifs sans délai */
     function attachFastKeyEvents() {
       const grid = document.querySelector('.keyboard-grid');
       const handlePress = (e) => {
