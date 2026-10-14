@@ -3,1565 +3,1479 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="mobile-web-app-capable" content="yes">
+  <title>Math Quest RPG 2.0 - Donjon Mathématique</title>
+  
+  <!-- Configuration PWA iOS & Android -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0b0f19">
-  <title>La Quête des Nombres : Le Donjon Mathématique</title>
-  
+  <meta name="apple-mobile-web-app-title" content="Math Quest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#4f46e5">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --bg-dark: #0b0f19;
-      --card-bg: rgba(15, 23, 42, 0.85);
-      --border-color: rgba(51, 65, 85, 0.7);
-    }
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
     }
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: rgba(30, 41, 59, 0.72);
+      --border-subtle: rgba(255, 255, 255, 0.09);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --gold: #fbbf24;
+      --green: #10b981;
+      --red: #f43f5e;
+      --cyan: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    html, body {
+      width: 100%;
       height: 100dvh;
-      min-height: -webkit-fill-available;
       overflow: hidden;
-      background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #0b0f19 55%, #050811 100%);
-      color: #f8fafc;
+      background-color: var(--bg-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-    }
-    .font-num {
-      font-variant-numeric: tabular-nums;
-    }
-    .panel {
-      width: 100%;
-      max-width: 420px;
-      background: var(--card-bg);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
+      padding: env(safe-area-inset-top, 8px) 14px env(safe-area-inset-bottom, 8px) 14px;
+      position: relative;
+      background: radial-gradient(circle at 50% 12%, rgba(99, 102, 241, 0.18), transparent 45%),
+                  radial-gradient(circle at 50% 88%, rgba(236, 72, 153, 0.08), transparent 50%),
+                  #090d16;
     }
 
-    /* En-tête */
-    .header-bar {
+    /* HEADER */
+    header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 12px;
+      padding: 4px 0;
+      gap: 4px;
     }
-    .badge-btn {
-      display: inline-flex;
+
+    .badge-player {
+      display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-subtle);
       padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      border: 1px solid transparent;
+      border-radius: 9999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
     }
-    .sub-bar {
+
+    .status-group {
       display: flex;
       align-items: center;
+      gap: 6px;
+    }
+
+    .hearts {
+      display: flex;
+      gap: 1px;
+      font-size: 0.95rem;
+    }
+
+    .coins {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+    }
+
+    .btn-icon {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text);
+      padding: 5px 9px;
+      border-radius: 9999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.15s;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.92);
+    }
+
+    /* WORLD BAR */
+    .world-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 0;
+    }
+
+    .world-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.14);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--primary-light);
+      cursor: pointer;
+    }
+
+    .review-badge {
+      display: none;
+      background: rgba(244, 63, 94, 0.2);
+      border: 1px solid var(--red);
+      color: #fda4af;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      animation: pulseBadge 1.5s infinite;
+    }
+
+    @keyframes pulseBadge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* CHRONO GAUGE */
+    .timer-container {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      margin: 2px 0;
+    }
+
+    .timer-info {
+      display: flex;
       justify-content: space-between;
-      font-size: 11px;
-      padding: 2px 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
 
-    /* Arène & Monstre */
-    @keyframes floatMonster {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-4px) scale(1.02); }
-    }
-    .monster-idle {
-      animation: floatMonster 3s ease-in-out infinite;
-      will-change: transform;
-    }
-    @keyframes shakeHit {
-      0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(-5px, -2px) rotate(-2deg); }
-      50% { transform: translate(5px, 2px) rotate(2deg); }
-      75% { transform: translate(-3px, 1px); }
-    }
-    .shake {
-      animation: shakeHit 0.3s ease-in-out;
+    .timer-bar-bg {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
     }
 
-    /* Zone Enigme */
-    .question-box {
-      max-width: 400px;
-      padding: 8px 12px;
-      min-height: 72px;
+    .timer-bar-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--green);
+      transition: width 0.1s linear, background-color 0.3s;
+    }
+
+    /* ANIMATED MONSTER ARENA */
+    .arena {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-    }
-    .slot-box {
-      min-width: 68px;
-      height: 38px;
-      padding: 0 10px;
-      border-radius: 12px;
-      background: #020617;
-      border: 2px solid rgba(251, 191, 36, 0.8);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 700;
-      color: #f59e0b;
-    }
-    .slot-empty {
-      color: #64748b !important;
+      position: relative;
+      min-height: 115px;
     }
 
-    /* Clavier */
-    .keyboard-grid {
+    .monster-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Animation de respiration / lévitation permanente */
+    .enemy-avatar-wrap {
+      position: relative;
+      font-size: 3.6rem;
+      line-height: 1;
+      animation: monsterFloat 2.6s ease-in-out infinite;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.5));
+      z-index: 2;
+    }
+
+    .enemy-avatar-wrap.boss-aura {
+      filter: drop-shadow(0 0 18px rgba(244, 63, 94, 0.75));
+      font-size: 4rem;
+    }
+
+    /* Ombre dynamique au sol */
+    .monster-shadow {
+      width: 64px;
+      height: 12px;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.65) 0%, transparent 75%);
+      border-radius: 50%;
+      margin-top: 2px;
+      animation: shadowPulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes monsterFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-9px) scale(1.04, 0.97); }
+    }
+
+    @keyframes shadowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(0.78); opacity: 0.4; }
+    }
+
+    /* Animation quand le monstre prend un coup */
+    .enemy-avatar-wrap.anim-hit {
+      animation: monsterHit 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+    }
+
+    @keyframes monsterHit {
+      0% { transform: scale(1); filter: brightness(1); }
+      20% { transform: translateX(-16px) rotate(-12deg) scale(0.88); filter: brightness(2.5) drop-shadow(0 0 20px var(--red)); }
+      45% { transform: translateX(14px) rotate(10deg) scale(1.08); }
+      70% { transform: translateX(-8px) rotate(-5deg); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    /* Animation quand le monstre attaque le joueur */
+    .enemy-avatar-wrap.anim-attack {
+      animation: monsterAttack 0.5s ease-in-out !important;
+    }
+
+    @keyframes monsterAttack {
+      0% { transform: scale(1) translateY(0); }
+      30% { transform: scale(0.9) translateY(-10px); }
+      55% { transform: scale(1.45) translateY(22px); filter: drop-shadow(0 0 25px var(--red)); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    /* Animation quand le monstre est vaincu (0 PV) */
+    .enemy-avatar-wrap.anim-die {
+      animation: monsterDie 0.55s ease-in forwards !important;
+    }
+
+    @keyframes monsterDie {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.3) rotate(180deg); filter: brightness(3) drop-shadow(0 0 25px var(--gold)); opacity: 0.8; }
+      100% { transform: scale(0) rotate(360deg); opacity: 0; }
+    }
+
+    /* Animation d'apparition d'un nouveau monstre */
+    .enemy-avatar-wrap.anim-spawn {
+      animation: monsterSpawn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    @keyframes monsterSpawn {
+      0% { transform: scale(0) translateY(-30px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    /* Effet de coup d'épée lumineux */
+    .slash-effect {
+      position: absolute;
+      width: 90px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #fff, var(--cyan), transparent);
+      box-shadow: 0 0 12px var(--cyan);
+      border-radius: 999px;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-35deg) scaleX(0);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .slash-effect.active {
+      animation: slashAnim 0.3s ease-out;
+    }
+
+    @keyframes slashAnim {
+      0% { transform: translate(-50%, -50%) rotate(-35deg) scaleX(0); opacity: 1; }
+      50% { transform: translate(-50%, -50%) rotate(-35deg) scaleX(1.5); opacity: 1; }
+      100% { transform: translate(-50%, -50%) rotate(-35deg) scaleX(1.8); opacity: 0; }
+    }
+
+    /* Texte flottant de dégâts (-1 PV, +5 Or) */
+    .floating-dmg {
+      position: absolute;
+      top: 10%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--gold);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 10;
+    }
+
+    .floating-dmg.show {
+      animation: floatUp 0.8s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(10px) scale(0.8); opacity: 1; }
+      100% { transform: translateY(-28px) scale(1.1); opacity: 0; }
+    }
+
+    .enemy-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .enemy-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .enemy-hp-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .enemy-hp-bar {
+      width: 120px;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .enemy-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      width: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .enemy-hp-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* QUESTION CARD */
+    .question-box {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.4);
+      margin-bottom: 6px;
+    }
+
+    .question-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .problem-text {
+      display: none;
+      font-size: 0.85rem;
+      line-height: 1.32;
+      text-align: center;
+      color: #f1f5f9;
+      font-weight: 500;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 7px 10px;
+      border-radius: 10px;
+      border-left: 3px solid var(--primary);
+      width: 100%;
+    }
+
+    .calc-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .calc-expr {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .answer-slot {
+      min-width: 74px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px dashed rgba(99, 102, 241, 0.55);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--primary-light);
+      padding: 0 8px;
+    }
+
+    /* KEYPAD MOBILE AVEC VIRGULE */
+    .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      width: 100%;
-      max-width: 340px;
     }
+
     .key-btn {
-      height: 42px;
-      border-radius: 12px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #ffffff;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: 13px;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.25rem;
       font-weight: 700;
-      font-size: 19px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 3px 0 #0f172a;
-      transition: transform 0.04s ease, box-shadow 0.04s ease;
-      will-change: transform;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+      transition: transform 0.08s, background 0.15s;
     }
+
     .key-btn:active {
       transform: translateY(2px);
-      box-shadow: 0 1px 0 #0f172a;
-      background: #334155;
-    }
-    .key-delete {
-      background: rgba(136, 19, 55, 0.7);
-      border-color: rgba(190, 18, 60, 0.6);
-      color: #fda4af;
-    }
-    .key-delete:active {
-      background: #881337;
+      background: rgba(255, 255, 255, 0.14);
     }
 
-    .btn-attack {
-      width: 100%;
-      max-width: 340px;
-      height: 42px;
-      margin-top: 6px;
-      border-radius: 12px;
-      background: linear-gradient(to right, #059669, #0d9488);
-      border: 1px solid #34d399;
-      color: #020617;
-      font-weight: 800;
-      font-size: 13px;
+    .key-btn.action-clear {
+      color: var(--red);
+      background: rgba(244, 63, 94, 0.12);
+      border-color: rgba(244, 63, 94, 0.25);
+      font-size: 1.1rem;
+    }
+
+    .key-btn.action-comma {
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+
+    .key-btn.action-submit {
+      grid-column: span 3;
+      height: 44px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: white;
+      border: none;
+      font-size: 1.05rem;
       letter-spacing: 0.03em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 3px 0 #047857;
-      transition: transform 0.04s ease;
-    }
-    .btn-attack:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #047857;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+      margin-top: 2px;
     }
 
-    /* Barre HP et Chrono */
-    .bar-bg {
-      background: #020617;
-      border: 1px solid rgba(51, 65, 85, 0.8);
-      border-radius: 9999px;
-      overflow: hidden;
-      padding: 1px;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 9999px;
-      transition: width 0.15s ease-out;
-    }
-
-    /* Modales */
-    .modal-overlay {
+    /* MODALS */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.82);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 50;
-      display: flex;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 16px;
+      z-index: 100;
     }
-    .hidden {
-      display: none !important;
+
+    .modal-box {
+      width: 100%;
+      max-width: 390px;
+      max-height: 86dvh;
+      background: #131b2e;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
+      animation: popIn 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .custom-scroll::-webkit-scrollbar {
-      width: 4px;
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 9999px;
+
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 6px 0 4px 0;
+    }
+
+    .modal-scroll {
+      width: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 10px 0 14px 0;
+      padding-right: 4px;
+    }
+
+    .hint-calc {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin: 8px 0;
+      width: 100%;
+    }
+
+    .hint-step {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 12px;
+      border-radius: 12px;
+      text-align: left;
+      font-size: 0.84rem;
+      line-height: 1.4;
+      border-left: 3px solid var(--gold);
+      width: 100%;
+    }
+
+    .modal-btn {
+      width: 100%;
+      min-height: 44px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      border: none;
+      border-radius: 13px;
+      color: white;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    /* LIST ITEMS (WORLDS, SHOP, TROPHIES) */
+    .list-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      gap: 10px;
+    }
+
+    .list-item.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: var(--primary);
+    }
+
+    .item-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .item-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-buy {
+      background: var(--gold);
+      color: #090d16;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-buy.owned {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--green);
+      border: 1px solid var(--green);
     }
   </style>
 </head>
 <body>
 
-  <!-- BARRE JOUEUR -->
-  <header class="panel header-bar">
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button onclick="toggleShop()" class="badge-btn" style="background:#1e1b4b; border-color:rgba(99,102,241,0.4); color:#e0e7ff;">
-        <span id="player-avatar" style="font-size:14px;">🧙‍♀️</span>
-        <span id="player-title">Apprentie</span>
-      </button>
-      <div id="hearts-container" style="display:flex; gap:2px; font-size:13px;">
-        <span>❤️</span><span>❤️</span><span>❤️</span>
+  <div class="app-container">
+    <!-- HEADER -->
+    <header>
+      <div class="badge-player" id="btnOpenShopFromAvatar" title="Changer d'avatar">
+        <span id="playerIcon">🧙‍♀️</span>
+        <span id="playerRank">Niv. 1</span>
+        <span id="shieldIcon" style="display:none;" title="Bouclier actif">🛡️</span>
+      </div>
+
+      <div class="status-group">
+        <div class="hearts" id="heartsDisplay">❤️❤️❤️</div>
+        <div class="coins" id="btnShop">
+          <span>🪙</span>
+          <span id="coinCount">0</span>
+          <span style="font-size:0.65rem; opacity:0.8;">🛒</span>
+        </div>
+        <button class="btn-icon" id="btnTrophies" title="Trophées">🏆</button>
+        <button class="btn-icon" id="btnSound" title="Son">🔊</button>
+        <button class="btn-icon" id="btnMap">🗺️</button>
+      </div>
+    </header>
+
+    <!-- WORLD BANNER -->
+    <div class="world-bar">
+      <div class="world-pill" id="btnChangeWorld">
+        <span id="worldTitle">🌲 1. Forêt des Additions</span>
+        <span style="font-size: 0.7rem; opacity: 0.7;">▾</span>
+      </div>
+      <div class="review-badge" id="reviewBadge">🧠 Défi Revanche !</div>
+    </div>
+
+    <!-- CHRONO DISPLAY -->
+    <div class="timer-container" id="timerContainer">
+      <div class="timer-info">
+        <span>⏱️ Chrono Arène</span>
+        <span id="timerText">10.0s</span>
+      </div>
+      <div class="timer-bar-bg">
+        <div class="timer-bar-fill" id="timerBar"></div>
       </div>
     </div>
 
-    <div style="display:flex; align-items:center; gap:8px;">
-      <div class="badge-btn" style="background:#451a03; border-color:rgba(251,191,36,0.4); color:#fde047;">
-        <span>🪙</span>
-        <span id="gold-display" class="font-num">0</span>
+    <!-- ANIMATED ARENA -->
+    <div class="arena">
+      <div class="floating-dmg" id="floatingDmg">-1 PV ⚔️</div>
+      <div class="monster-stage">
+        <div class="slash-effect" id="slashEffect"></div>
+        <div class="enemy-avatar-wrap" id="enemyAvatar">🐺</div>
+        <div class="monster-shadow"></div>
       </div>
-      <button id="audio-toggle-btn" onclick="toggleAudio()" style="width:28px; height:28px; border-radius:10px; background:#1e293b; border:1px solid #334155; color:#fff; cursor:pointer;">
-        🔊
-      </button>
-      <button onclick="openWorldMenu()" class="badge-btn" style="background:linear-gradient(to right, #7c3aed, #4f46e5); color:#fff; border-color:rgba(167,139,250,0.5);">
-        <span>🗺️ Mondes</span>
-      </button>
+      <div class="enemy-info">
+        <div class="enemy-name" id="enemyName">Loup Sylvestre</div>
+      </div>
+      <div class="enemy-hp-wrap">
+        <div class="enemy-hp-bar">
+          <div class="enemy-hp-fill" id="enemyHpFill"></div>
+        </div>
+        <div class="enemy-hp-text" id="enemyHpText">5/5 PV</div>
+      </div>
     </div>
-  </header>
 
-  <!-- SOUS-BARRE MONDE -->
-  <div class="panel sub-bar" style="background:transparent; border:none; max-width:420px;">
-    <button onclick="openWorldMenu()" class="badge-btn" style="background:#1e293b; border-color:#334155; color:#e2e8f0;">
-      <span id="world-icon">🌲</span>
-      <span id="world-title" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">1. Forêt des Additions</span>
-      <span style="color:#a5b4fc; font-size:10px;">▾</span>
-    </button>
-    <div id="streak-badge" class="hidden badge-btn" style="background:linear-gradient(to right, #f59e0b, #ea580c); color:#fff;">
-      ⚡ COMBO x<span id="combo-count">1</span>
+    <!-- QUESTION CARD -->
+    <div class="question-box">
+      <div class="question-label" id="questionLabel">RÉSOUS L'ÉNIGME</div>
+      <div class="problem-text" id="problemText"></div>
+      <div class="calc-row">
+        <div class="calc-expr" id="calcExpr">45 + 38 =</div>
+        <div class="answer-slot" id="answerSlot">?</div>
+      </div>
+    </div>
+
+    <!-- KEYPAD AVEC VIRGULE -->
+    <div class="keypad">
+      <button class="key-btn" data-val="1">1</button>
+      <button class="key-btn" data-val="2">2</button>
+      <button class="key-btn" data-val="3">3</button>
+      <button class="key-btn" data-val="4">4</button>
+      <button class="key-btn" data-val="5">5</button>
+      <button class="key-btn" data-val="6">6</button>
+      <button class="key-btn" data-val="7">7</button>
+      <button class="key-btn" data-val="8">8</button>
+      <button class="key-btn" data-val="9">9</button>
+      <button class="key-btn action-comma" data-val=".">,</button>
+      <button class="key-btn" data-val="0">0</button>
+      <button class="key-btn action-clear" data-action="clear">⌫</button>
+      <button class="key-btn action-submit" data-action="submit">⚔️ ATTAQUER !</button>
     </div>
   </div>
 
-  <!-- CHRONO -->
-  <div id="chrono-container" class="hidden" style="width:100%; max-width:420px; flex-direction:column; padding:0 4px;">
-    <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:#fde68a; margin-bottom:2px;">
-      <span>⏱️ Vitesse : <strong id="chrono-seconds-text" class="font-num" style="color:#fff;">10s</strong></span>
-      <span id="chrono-bonus-tag" style="color:#34d399; opacity:0; transition:opacity 0.2s;">⚡ Bonus +1 🪙 !</span>
-    </div>
-    <div class="bar-bg" style="height:8px;">
-      <div id="chrono-progress-bar" class="bar-fill" style="width:100%; background:linear-gradient(to right, #34d399, #14b8a6);"></div>
-    </div>
-  </div>
-
-  <!-- ARENA DU MONSTRE -->
-  <section style="width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center; position:relative;">
-    <div id="monster-wrapper" style="display:flex; flex-direction:column; align-items:center;">
-      <div id="monster-sprite" class="monster-idle" style="font-size:54px; cursor:pointer;" onclick="pokeMonster()">🐺</div>
-      <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-        <span id="monster-name" style="font-size:12px; font-weight:600; color:#e2e8f0;">Loup Sylvestre</span>
-        <span style="font-size:10px; background:#1e293b; color:#fde047; padding:1px 6px; border-radius:9999px; border:1px solid #334155;">Étape <span id="monster-level">1</span>/3</span>
-      </div>
-      <div class="bar-bg" style="width:160px; height:8px; margin-top:4px;">
-        <div id="monster-hp-bar" class="bar-fill" style="width:100%; background:linear-gradient(to right, #10b981, #14b8a6);"></div>
-      </div>
-      <span id="monster-hp-text" class="font-num" style="font-size:10px; color:#94a3b8; margin-top:2px;">3 / 3 PV</span>
-    </div>
-    <div id="fx-layer" style="position:absolute; inset:0; pointer-events:none; display:flex; align-items:center; justify-content:center;"></div>
-  </section>
-
-  <!-- ENIGME -->
-  <section class="panel question-box">
-    <div style="font-size:10px; color:#a5b4fc; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:2px;">Énigme Mathématique</div>
-    <div id="math-problem-box" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%;">
-      <div id="math-problem" class="font-num" style="font-size:24px; font-weight:700; color:#fff;">49 + 39</div>
-      <span id="equal-sign" style="font-size:20px; font-weight:700; color:#fbbf24;">=</span>
-      <div class="slot-box">
-        <span id="answer-text" class="font-num slot-empty">?</span>
-      </div>
-    </div>
-    <div id="coach-hint-quick" style="font-size:11px; color:#94a3b8; margin-top:4px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-      Trouve la bonne réponse pour porter un coup d'épée !
-    </div>
-  </section>
-
-  <!-- CLAVIER -->
-  <section style="width:100%; display:flex; flex-direction:column; align-items:center;">
-    <div class="keyboard-grid">
-      <button class="key-btn font-num" data-k="1">1</button>
-      <button class="key-btn font-num" data-k="2">2</button>
-      <button class="key-btn font-num" data-k="3">3</button>
-
-      <button class="key-btn font-num" data-k="4">4</button>
-      <button class="key-btn font-num" data-k="5">5</button>
-      <button class="key-btn font-num" data-k="6">6</button>
-
-      <button class="key-btn font-num" data-k="7">7</button>
-      <button class="key-btn font-num" data-k="8">8</button>
-      <button class="key-btn font-num" data-k="9">9</button>
-
-      <button class="key-btn font-num" data-k="," style="color:#c7d2fe;">,</button>
-      <button class="key-btn font-num" data-k="0">0</button>
-      <button class="key-btn key-delete font-num" data-k="del">⌫</button>
-    </div>
-
-    <button id="btn-confirm-attack" class="btn-attack">
-      <span>⚔️</span> ATTAQUER LE MONSTRE
-    </button>
-  </section>
-
-  <!-- MODALE EXPLICATION DU MAGE -->
-  <div id="explanation-modal" class="modal-overlay hidden">
-    <div class="panel" style="max-width:340px; padding:16px; text-align:center; border-color:rgba(251,191,36,0.6);">
-      <div style="font-size:32px; margin-bottom:4px;">🧙‍♂️</div>
-      <div style="font-weight:700; font-size:15px; color:#fde047;">Le Conseil du Grand Mage</div>
-      <div style="font-size:11px; color:#94a3b8; margin-bottom:10px;">Chaque erreur te rend plus forte !</div>
-
-      <div style="background:#020617; border-radius:10px; padding:8px; border:1px solid #1e293b; margin-bottom:8px;">
-        <div style="font-size:9px; color:#94a3b8; text-transform:uppercase;">Énigme :</div>
-        <div id="explain-question" class="font-num" style="font-size:13px; font-weight:600; color:#e2e8f0; margin-top:2px;"></div>
-      </div>
-
-      <div style="background:rgba(6,78,59,0.5); border-radius:10px; padding:8px; border:1px solid rgba(52,211,153,0.4); margin-bottom:8px;">
-        <div style="font-size:9px; color:#34d399; font-weight:600; text-transform:uppercase;">Bonne Réponse :</div>
-        <div id="explain-answer" class="font-num" style="font-size:22px; font-weight:800; color:#6ee7b7; margin-top:2px;"></div>
-      </div>
-
-      <div style="background:#020617; border-radius:10px; padding:10px; border:1px solid rgba(99,102,241,0.3); text-align:left; margin-bottom:12px;">
-        <div style="font-size:11px; font-weight:700; color:#fde047; margin-bottom:4px;">💡 Méthode :</div>
-        <div id="explain-step-by-step" style="font-size:11px; color:#cbd5e1; line-height:1.4;"></div>
-      </div>
-
-      <button onclick="closeExplanation()" class="btn-attack" style="max-width:100%; background:linear-gradient(to right, #fbbf24, #f59e0b); color:#020617; border-color:#fef08a;">
-        J'ai compris ! Continuer ⚔️
-      </button>
+  <!-- MODAL EXPLICATION -->
+  <div class="modal-backdrop" id="modalExplanation">
+    <div class="modal-box">
+      <div style="font-size: 2.6rem;">🧙‍♂️</div>
+      <div class="modal-title" style="color: var(--cyan);" id="expModalTitle">Astuce du Grand Mage</div>
+      <div class="hint-calc" id="hintSolution">45 + 38 = 83</div>
+      <div class="hint-step" id="hintExplanation"></div>
+      <p style="font-size: 0.72rem; color: var(--text-muted); margin: 8px 0 12px 0;">
+        🧠 Ce calcul a été mémorisé pour que tu puisses prendre ta revanche plus tard !
+      </p>
+      <button class="modal-btn" id="btnCloseExplanation">J'ai compris ! Continuer ⚔️</button>
     </div>
   </div>
 
-  <!-- MENU DES MONDES -->
-  <div id="world-select-overlay" class="modal-overlay">
-    <div class="panel" style="max-width:400px; max-height:94dvh; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
-      <div style="text-align:center; margin-bottom:6px;">
-        <div style="font-size:9px; color:#c7d2fe; background:#1e1b4b; padding:2px 8px; border-radius:9999px; display:inline-block; border:1px solid rgba(99,102,241,0.4); margin-bottom:4px; font-weight:600;">
-          ✨ Révise tes maths CM2 / 6e
-        </div>
-        <h2 style="font-size:18px; font-weight:800; color:#fde047;">La Quête des Nombres</h2>
-      </div>
-
-      <!-- Liste mondes -->
-      <div class="custom-scroll" style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; max-height:42dvh; padding-right:4px;">
-        <button onclick="launchWorld(1)" class="badge-btn" style="background:#022c22; border-color:#059669; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">🌲</span>
-            <div>
-              <div style="font-size:12px; color:#6ee7b7; font-weight:700;">Niveau 1 · Forêt des Additions</div>
-              <div style="font-size:10px; color:#cbd5e1;">Additions, soustractions & compléments</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:#065f46; color:#a7f3d0; padding:2px 6px; border-radius:6px;">Jouer</span>
-        </button>
-
-        <button onclick="launchWorld(2)" class="badge-btn" style="background:#451a03; border-color:#d97706; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">🏰</span>
-            <div>
-              <div style="font-size:12px; color:#fde047; font-weight:700;">Niveau 2 · Donjon des Multiplications</div>
-              <div style="font-size:10px; color:#cbd5e1;">Tables, carrés parfaits & divisions</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:#78350f; color:#fef08a; padding:2px 6px; border-radius:6px;">Jouer</span>
-        </button>
-
-        <button onclick="launchWorld(3)" class="badge-btn" style="background:#083344; border-color:#0891b2; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">🏛️</span>
-            <div>
-              <div style="font-size:12px; color:#67e8f9; font-weight:700;">Niveau 3 · Marais des Décimaux</div>
-              <div style="font-size:10px; color:#cbd5e1;">Virgules, compléments à 1 & mesures</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:#155e75; color:#a5f3fc; padding:2px 6px; border-radius:6px;">Jouer</span>
-        </button>
-
-        <button onclick="launchWorld(4)" class="badge-btn" style="background:#4c0519; border-color:#e11d48; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">🌋</span>
-            <div>
-              <div style="font-size:12px; color:#fda4af; font-weight:700;">Niveau 4 · Repaire du Boss</div>
-              <div style="font-size:10px; color:#cbd5e1;">Astuces expertes : × 5, × 11, × 25, × 50</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:#9f1239; color:#fecdd3; padding:2px 6px; border-radius:6px;">Jouer</span>
-        </button>
-
-        <button onclick="launchWorld(5)" class="badge-btn" style="background:#3b0764; border-color:#9333ea; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">📜</span>
-            <div>
-              <div style="font-size:12px; color:#d8b4fe; font-weight:700;">Niveau 5 · Labyrinthe des Énigmes</div>
-              <div style="font-size:10px; color:#cbd5e1;">Promos, heures, partages, périmètres & aires</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:#6b21a8; color:#f3e8ff; padding:2px 6px; border-radius:6px;">Quête</span>
-        </button>
-
-        <button onclick="launchWorld(6)" class="badge-btn" style="background:#451a03; border-color:#fbbf24; border-width:2px; padding:8px; width:100%; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px; text-align:left;">
-            <span style="font-size:22px;">⏱️</span>
-            <div>
-              <div style="font-size:12px; color:#fde047; font-weight:800;">Niveau 6 · L'Arène du Temps</div>
-              <div style="font-size:10px; color:#fef08a;">10s max ! Doubles, quadruples & réflexes</div>
-            </div>
-          </div>
-          <span style="font-size:10px; background:linear-gradient(to right, #fbbf24, #f97316); color:#020617; font-weight:800; padding:3px 8px; border-radius:6px;">DÉFI ⚡</span>
-        </button>
-      </div>
-
-      <!-- Historique des 10 parcours -->
-      <div style="margin-top:8px; padding:8px; border-radius:12px; background:#020617; border:1px solid #1e293b;">
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#cbd5e1; margin-bottom:4px;">
-          <span>📜 10 derniers parcours (touche pour le détail)</span>
-          <button onclick="clearRunHistory()" style="color:#f43f5e; background:transparent; border:none; font-size:10px; cursor:pointer;">Effacer</button>
-        </div>
-        <div id="runs-history-list" class="custom-scroll" style="display:flex; flex-direction:column; gap:4px; max-height:86px; overflow-y:auto; padding-right:2px;"></div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#94a3b8; border-top:1px solid #1e293b; padding-top:6px; margin-top:6px;">
-        <span>Victoires : <strong id="menu-total-wins" class="font-num" style="color:#fde047;">0</strong></span>
-        <span>Or total : <strong id="menu-total-coins" class="font-num" style="color:#fde047;">0 🪙</strong></span>
-      </div>
+  <!-- MODAL MONDES -->
+  <div class="modal-backdrop" id="modalWorlds">
+    <div class="modal-box">
+      <div style="font-size: 2rem;">🗺️</div>
+      <div class="modal-title">Carte des 6 Mondes</div>
+      <div class="modal-scroll" id="worldsList"></div>
+      <button class="modal-btn" id="btnCloseWorlds">Reprendre le combat</button>
     </div>
   </div>
 
-  <!-- POP-UP DÉTAIL PARCOURS -->
-  <div id="run-detail-modal" class="modal-overlay hidden">
-    <div class="panel" style="max-width:340px; max-height:90dvh; padding:14px; display:flex; flex-direction:column; border-color:#6366f1;">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e293b; padding-bottom:6px;">
-        <div>
-          <h3 id="run-detail-title" style="font-size:13px; font-weight:700; color:#c7d2fe;">Détails du Parcours</h3>
-          <p id="run-detail-subtitle" style="font-size:10px; color:#94a3b8;"></p>
-        </div>
-        <button onclick="closeRunDetail()" style="background:#1e293b; border:none; color:#94a3b8; border-radius:8px; padding:2px 8px; font-weight:700; cursor:pointer;">✕</button>
-      </div>
-
-      <div id="run-detail-stats" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; text-align:center; font-size:10px; margin:8px 0;"></div>
-      <div id="run-detail-questions-list" class="custom-scroll" style="display:flex; flex-direction:column; gap:6px; overflow-y:auto; margin:4px 0; padding-right:4px;"></div>
-
-      <button onclick="closeRunDetail()" class="badge-btn" style="background:#1e293b; border-color:#334155; color:#e2e8f0; width:100%; justify-content:center; padding:8px; margin-top:6px;">
-        Fermer
-      </button>
+  <!-- MODAL BOUTIQUE -->
+  <div class="modal-backdrop" id="modalShop">
+    <div class="modal-box">
+      <div style="font-size: 2rem;">🛒</div>
+      <div class="modal-title">Boutique du Mage</div>
+      <p style="font-size: 0.8rem; color: var(--gold); font-weight: 700;">Trésor : <span id="shopCoins">0</span> 🪙</p>
+      <div class="modal-scroll" id="shopList"></div>
+      <button class="modal-btn" id="btnCloseShop">Fermer la boutique</button>
     </div>
   </div>
 
-  <!-- FIN DE MONDE -->
-  <div id="end-dialog" class="modal-overlay hidden">
-    <div class="panel" style="max-width:300px; padding:16px; text-align:center; border-color:#fbbf24;">
-      <div id="end-icon" style="font-size:42px; margin-bottom:4px;">👑</div>
-      <h3 id="end-title" style="font-size:16px; font-weight:800; color:#fde047;">Donjon Triomphé !</h3>
-      <p id="end-desc" style="font-size:11px; color:#cbd5e1; margin-bottom:10px;"></p>
-
-      <div style="background:#020617; padding:8px; border-radius:12px; border:1px solid #1e293b; margin-bottom:12px; display:flex; justify-content:space-around;">
-        <div>
-          <div style="font-size:9px; color:#94a3b8;">Or gagné</div>
-          <div id="end-gold-gain" class="font-num" style="font-size:13px; font-weight:700; color:#fbbf24;">+10 🪙</div>
-        </div>
-        <div>
-          <div style="font-size:9px; color:#94a3b8;">Meilleur Combo</div>
-          <div id="end-max-combo" class="font-num" style="font-size:13px; font-weight:700; color:#f97316;">3 🔥</div>
-        </div>
-      </div>
-
-      <div style="display:flex; gap:8px;">
-        <button onclick="openWorldMenu()" class="badge-btn" style="background:#1e293b; border-color:#334155; color:#fff; flex:1; justify-content:center; padding:8px;">Mondes</button>
-        <button onclick="retryCurrentWorld()" class="badge-btn" style="background:#fbbf24; color:#020617; font-weight:800; flex:1; justify-content:center; padding:8px;">Rejouer ⚔️</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- GARDE-ROBE -->
-  <div id="shop-dialog" class="modal-overlay hidden">
-    <div class="panel" style="max-width:300px; padding:14px; border-color:rgba(99,102,241,0.5);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <h3 style="font-size:13px; font-weight:700; color:#c7d2fe;">Garde-robe</h3>
-        <button onclick="toggleShop()" style="background:#1e293b; border:none; color:#94a3b8; border-radius:6px; padding:2px 6px;">✕</button>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:6px; background:#020617; border-radius:10px; border:1px solid #1e293b;">
-          <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:20px;">🧙‍♀️</span><span style="font-size:11px; color:#e2e8f0;">Apprentie</span></div>
-          <button id="btn-skin-mage" onclick="setAvatar('🧙‍♀️')" class="badge-btn" style="background:#4f46e5; color:#fff; padding:3px 8px;">Équiper</button>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:6px; background:#020617; border-radius:10px; border:1px solid #1e293b;">
-          <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:20px;">🧝‍♀️</span><span style="font-size:11px; color:#e2e8f0;">Elfe (15 🪙)</span></div>
-          <button id="btn-skin-elf" onclick="buyAvatar('🧝‍♀️', 15)" class="badge-btn" style="background:#fbbf24; color:#020617; font-weight:700; padding:3px 8px;">15 🪙</button>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:6px; background:#020617; border-radius:10px; border:1px solid #1e293b;">
-          <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:20px;">🐉</span><span style="font-size:11px; color:#e2e8f0;">Dragon (30 🪙)</span></div>
-          <button id="btn-skin-dragon" onclick="buyAvatar('🐉', 30)" class="badge-btn" style="background:#fbbf24; color:#020617; font-weight:700; padding:3px 8px;">30 🪙</button>
-        </div>
-      </div>
+  <!-- MODAL TROPHÉES -->
+  <div class="modal-backdrop" id="modalTrophies">
+    <div class="modal-box">
+      <div style="font-size: 2rem;">🏆</div>
+      <div class="modal-title">Salle des Trophées</div>
+      <div class="modal-scroll" id="trophiesList"></div>
+      <button class="modal-btn" id="btnCloseTrophies">Continuer</button>
     </div>
   </div>
 
   <script>
-    /* Moteur Audio Léger */
+    // --- AUDIO SYNTHETIZER ---
     class SoundEngine {
-      constructor() {
-        this.ctx = null;
-        this.enabled = true;
-      }
+      constructor() { this.ctx = null; this.enabled = true; }
       init() {
-        if (!this.enabled) return;
         if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) this.ctx = new AudioContext();
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
         }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
       }
       playHit() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(260, now);
-        osc.frequency.exponentialRampToValueAtTime(70, now + 0.1);
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(now + 0.11);
+        if (!this.enabled) return; this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(55, this.ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.14);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.15);
       }
-      playCorrect() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        [523.25, 659.25, 783.99].forEach((f, i) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
+      playMonsterKill() {
+        if (!this.enabled) return; this.init(); if (!this.ctx) return;
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(f, now + i * 0.07);
-          gain.gain.setValueAtTime(0.1, now + i * 0.07);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.12);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(now + i * 0.07);
-          osc.stop(now + i * 0.07 + 0.13);
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.07);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime + idx * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.07 + 0.18);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.07);
+          osc.stop(this.ctx.currentTime + idx * 0.07 + 0.19);
         });
       }
-      playMistake() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.linearRampToValueAtTime(110, now + 0.18);
-        gain.gain.setValueAtTime(0.16, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(now + 0.19);
-      }
-      playVictory() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.value = f;
-          const start = this.ctx.currentTime + (i * 0.08);
-          gain.gain.setValueAtTime(0.12, start);
-          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(start);
-          osc.stop(start + 0.19);
-        });
-      }
-      playTick() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, now);
-        gain.gain.setValueAtTime(0.02, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(now + 0.03);
-      }
-      playAlarm() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(280, now);
-        osc.frequency.setValueAtTime(180, now + 0.1);
-        gain.gain.setValueAtTime(0.14, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(now + 0.21);
+      playError() {
+        if (!this.enabled) return; this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(130, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(95, this.ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.28);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.29);
       }
     }
-    const audio = new SoundEngine();
+    const sound = new SoundEngine();
 
-    /* PERSISTANCE */
-    const STORAGE_KEY_SAVE = 'math_quest_profile_save';
-    const STORAGE_KEY_RUNS = 'math_quest_last_runs';
-
-    const gameState = {
-      world: 1,
-      playerHP: 3,
-      maxHP: 3,
-      gold: 0,
-      totalWins: 0,
-      streak: 0,
-      maxStreakRound: 0,
-      goldEarnedRound: 0,
-      currentInput: '',
-      currentQuestionText: '',
-      expectedAnswerStr: '',
-      teachingHint: '',
-      monsterMaxHP: 3,
-      monsterHP: 3,
-      monsterLevel: 1,
-      unlockedSkins: ['🧙‍♀️'],
-      activeSkin: '🧙‍♀️',
-      timerInterval: null,
-      timeLimit: 10,
-      timeLeft: 10,
-      questionStartTime: 0,
-      currentRunLog: []
+    // --- SAUVEGARDE LOCALSTORAGE V2 ---
+    const SAVE_KEY = 'MATH_QUEST_SAVE_V2';
+    let saveState = {
+      coins: 0,
+      xp: 0,
+      level: 1,
+      avatar: '🧙‍♀️',
+      ownedAvatars: ['🧙‍♀️'],
+      hasShield: false,
+      monstersKilled: 0,
+      completedCounts: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0},
+      bestChronoStreak: 0,
+      mistakeQueue: [] // Révision intelligente
     };
 
-    /* Cache DOM */
-    const DOM = {};
-    function cacheDOM() {
-      DOM.answerText = document.getElementById('answer-text');
-      DOM.goldDisplay = document.getElementById('gold-display');
-      DOM.heartsContainer = document.getElementById('hearts-container');
-      DOM.streakBadge = document.getElementById('streak-badge');
-      DOM.comboCount = document.getElementById('combo-count');
-      DOM.worldTitle = document.getElementById('world-title');
-      DOM.worldIcon = document.getElementById('world-icon');
-      DOM.playerAvatar = document.getElementById('player-avatar');
-      DOM.playerTitle = document.getElementById('player-title');
-      DOM.monsterSprite = document.getElementById('monster-sprite');
-      DOM.monsterName = document.getElementById('monster-name');
-      DOM.monsterLevel = document.getElementById('monster-level');
-      DOM.monsterHpBar = document.getElementById('monster-hp-bar');
-      DOM.monsterHpText = document.getElementById('monster-hp-text');
-      DOM.monsterWrapper = document.getElementById('monster-wrapper');
-      DOM.mathProblem = document.getElementById('math-problem');
-      DOM.equalSign = document.getElementById('equal-sign');
-      DOM.coachHint = document.getElementById('coach-hint-quick');
-      DOM.chronoContainer = document.getElementById('chrono-container');
-      DOM.chronoBar = document.getElementById('chrono-progress-bar');
-      DOM.chronoSeconds = document.getElementById('chrono-seconds-text');
-      DOM.chronoBonus = document.getElementById('chrono-bonus-tag');
-    }
-
-    function loadProfile() {
+    function loadProgress() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY_SAVE);
-        if (raw) {
-          const data = JSON.parse(raw);
-          if (typeof data.gold === 'number') gameState.gold = data.gold;
-          if (typeof data.totalWins === 'number') gameState.totalWins = data.totalWins;
-          if (Array.isArray(data.unlockedSkins)) gameState.unlockedSkins = data.unlockedSkins;
-          if (data.activeSkin) gameState.activeSkin = data.activeSkin;
-        }
-      } catch (e) {}
-      updateSkinButtons();
-    }
-
-    function saveProfile() {
-      try {
-        localStorage.setItem(STORAGE_KEY_SAVE, JSON.stringify({
-          gold: gameState.gold,
-          totalWins: gameState.totalWins,
-          unlockedSkins: gameState.unlockedSkins,
-          activeSkin: gameState.activeSkin
-        }));
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (raw) saveState = Object.assign(saveState, JSON.parse(raw));
       } catch (e) {}
     }
+    function saveProgress() {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(saveState)); } catch (e) {}
+    }
+    loadProgress();
 
-    function getSavedRuns() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY_RUNS);
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        return [];
+    // --- MONDES & ROSTER DE MONSTRES ANIMÉS ---
+    const WORLDS = [
+      {
+        id: 1, name: "Forêt des Additions", icon: "🌲", desc: "Additions, soustractions & compléments",
+        monsters: [
+          { icon: "🐺", name: "Loup Sylvestre" },
+          { icon: "🐗", name: "Sanglier Ronce" },
+          { icon: "🕷️", name: "Araignée Émeraude" },
+          { icon: "🦊", name: "Renard Mystique (Boss)", boss: true }
+        ]
+      },
+      {
+        id: 2, name: "Donjon des Tables", icon: "🏰", desc: "Tables de 6 à 9 & carrés parfaits",
+        monsters: [
+          { icon: "🦇", name: "Chauve-Souris" },
+          { icon: "💀", name: "Squelette d'Armure" },
+          { icon: "👹", name: "Gargouille de Fer" },
+          { icon: "⚔️", name: "Chevalier Noir (Boss)", boss: true }
+        ]
+      },
+      {
+        id: 3, name: "Marais des Décimaux", icon: "🧪", desc: "Nombres à virgule, ×10, ÷10 (Spécial 6e)",
+        monsters: [
+          { icon: "🐸", name: "Crapaud Alchimiste" },
+          { icon: "🦎", name: "Salamandre Acide" },
+          { icon: "🐙", name: "Kraken des Brumes" },
+          { icon: "🐍", name: "Hydre Décimale (Boss)", boss: true }
+        ]
+      },
+      {
+        id: 4, name: "Pic du Calcul Malin", icon: "🌋", desc: "Doubles, moitiés, ×9 et ×11 astucieux",
+        monsters: [
+          { icon: "🦅", name: "Griffon des Cimes" },
+          { icon: "🔥", name: "Élémentaire de Feu" },
+          { icon: "🦖", name: "Vouivre de Lave" },
+          { icon: "🐉", name: "Dragon Mathémagus (Boss)", boss: true }
+        ]
+      },
+      {
+        id: 5, name: "Labyrinthe des Énigmes", icon: "📜", desc: "Problèmes variés : achats, durées, géométrie",
+        monsters: [
+          { icon: "🦉", name: "Chouette Savante" },
+          { icon: "🧞", name: "Génie des Énigmes" },
+          { icon: "🦄", name: "Licorne Astrale" },
+          { icon: "🦁", name: "Sphinx Royal (Boss)", boss: true }
+        ]
+      },
+      {
+        id: 6, name: "Arène du Temps", icon: "⏱️", desc: "10 secondes par calcul ! Réflexes purs",
+        monsters: [
+          { icon: "⚡", name: "Esprit Foudroyant" },
+          { icon: "🤖", name: "Automate Chrono" },
+          { icon: "☄️", name: "Comète Vivante" },
+          { icon: "⏳", name: "Titan Chronos (Boss)", boss: true }
+        ]
       }
-    }
+    ];
 
-    function saveRunRecord(isVictory) {
-      try {
-        const runs = getSavedRuns();
-        runs.unshift({
-          date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
-          world: gameState.world,
-          clearedStage: isVictory ? 3 : Math.max(1, gameState.monsterLevel),
-          goldEarned: gameState.goldEarnedRound,
-          bestCombo: gameState.maxStreakRound,
-          victory: isVictory,
-          questionsLog: [...gameState.currentRunLog]
-        });
-        if (runs.length > 10) runs.length = 10;
-        localStorage.setItem(STORAGE_KEY_RUNS, JSON.stringify(runs));
-      } catch (e) {}
-      renderRunsHistory();
-    }
+    const SHOP_ITEMS = [
+      { id: 'shield', name: "Bouclier Magique", icon: "🛡️", price: 15, type: 'consumable', desc: "Protège d'une erreur ou d'un chrono expiré" },
+      { id: '🥷', name: "Ninja des Nombres", icon: "🥷", price: 25, type: 'avatar', desc: "Avatar maître de la vitesse" },
+      { id: '🦸‍♀️', name: "Super-Héroïne", icon: "🦸‍♀️", price: 40, type: 'avatar', desc: "Avatar cosmique de niveau 6e" },
+      { id: '🦊', name: "Esprit Kitsune", icon: "🦊", price: 60, type: 'avatar', desc: "Avatar légendaire de la ruse" },
+      { id: '👑', name: "Reine des Maths", icon: "👑", price: 100, type: 'avatar', desc: "Avatar ultime du Donjon" }
+    ];
 
-    function renderRunsHistory() {
-      const container = document.getElementById('runs-history-list');
-      if (!container) return;
+    const TROPHIES = [
+      { id: 'first_kill', icon: '⚔️', name: "Première Chasse", desc: "Vaincre ton 1er monstre complet (5/5 PV)", check: () => saveState.monstersKilled >= 1 },
+      { id: 'ten_kills', icon: '🔥', name: "Dompteuse de Monstres", desc: "Vaincre 10 monstres au total", check: () => saveState.monstersKilled >= 10 },
+      { id: 'decimals', icon: '🧪', name: "Experte des Virgules", desc: "Réussir 10 calculs dans le Monde 3 (Décimaux)", check: () => (saveState.completedCounts[3] || 0) >= 10 },
+      { id: 'problems', icon: '🕵️‍♀️', name: "Détective de 6e", desc: "Résoudre 10 problèmes dans le Monde 5", check: () => (saveState.completedCounts[5] || 0) >= 10 },
+      { id: 'chrono', icon: '⚡', name: "Vitesse de l'Éclair", desc: "Enchaîner 5 réponses sans erreur en Mode Chrono", check: () => saveState.bestChronoStreak >= 5 },
+      { id: 'rich', icon: '💎', name: "Trésor Royal", desc: "Posséder au moins 50 pièces d'or", check: () => saveState.coins >= 50 }
+    ];
 
-      const runs = getSavedRuns();
-      if (runs.length === 0) {
-        container.innerHTML = '<div style="color:#64748b; text-align:center; padding:6px 0; font-size:10px; font-style:italic;">Aucun parcours enregistré</div>';
-        return;
-      }
+    // --- ÉTAT DE LA PARTIE ---
+    let currentWorld = 1;
+    let monsterIndex = 0;
+    let monsterMaxHp = 5;
+    let monsterHp = 5;
+    let hearts = 3;
+    let currentInput = "";
+    let currentQuestion = null;
+    let chronoInterval = null;
+    let chronoRemaining = 10;
+    let currentStreak = 0;
 
-      const worldIcons = { 1: "🌲", 2: "🏰", 3: "🏛️", 4: "🌋", 5: "📜", 6: "⏱️" };
-
-      container.innerHTML = runs.map((r, idx) => `
-        <div onclick="openRunDetail(${idx})" style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; border-radius:8px; background:#0f172a; border:1px solid #1e293b; cursor:pointer;">
-          <div style="display:flex; align-items:center; gap:5px;">
-            <span>${r.victory ? '👑' : '💀'}</span>
-            <span style="font-weight:600; color:#e2e8f0; font-size:10px;">${worldIcons[r.world] || '🗺️'} M${r.world} (${r.victory ? 'Conquis' : 'Étape ' + r.clearedStage + '/3'})</span>
-          </div>
-          <div class="font-num" style="display:flex; align-items:center; gap:6px; font-size:10px; color:#94a3b8;">
-            <span style="color:#fde047; font-weight:700;">+${r.goldEarned} 🪙</span>
-            <span style="color:#fb923c;">🔥 ${r.bestCombo}</span>
-            <span style="color:#64748b; font-size:9px;">${r.date}</span>
-            <span style="color:#818cf8; font-weight:800;">›</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openRunDetail(index) {
-      const run = getSavedRuns()[index];
-      if (!run) return;
-
-      const worldNames = { 1: "Forêt Additions", 2: "Donjon Multiplications", 3: "Marais Décimaux", 4: "Repaire Boss", 5: "Labyrinthe Énigmes", 6: "L'Arène du Temps" };
-      document.getElementById('run-detail-title').innerText = `${run.victory ? '👑 Victoire' : '🛡️ Inachevé'} · Monde ${run.world}`;
-      document.getElementById('run-detail-subtitle').innerText = `${worldNames[run.world] || ''} · ${run.date}`;
-
-      const totalQ = (run.questionsLog || []).length;
-      const correctQ = (run.questionsLog || []).filter(q => q.correct).length;
-
-      document.getElementById('run-detail-stats').innerHTML = `
-        <div style="background:#020617; padding:6px; border-radius:8px; border:1px solid #1e293b;">
-          <div style="color:#94a3b8; font-size:9px;">Réussite</div>
-          <div class="font-num" style="color:#34d399; font-weight:700;">${correctQ} / ${totalQ}</div>
-        </div>
-        <div style="background:#020617; padding:6px; border-radius:8px; border:1px solid #1e293b;">
-          <div style="color:#94a3b8; font-size:9px;">Or</div>
-          <div class="font-num" style="color:#fde047; font-weight:700;">+${run.goldEarned} 🪙</div>
-        </div>
-        <div style="background:#020617; padding:6px; border-radius:8px; border:1px solid #1e293b;">
-          <div style="color:#94a3b8; font-size:9px;">Combo</div>
-          <div class="font-num" style="color:#fb923c; font-weight:700;">${run.bestCombo} 🔥</div>
-        </div>
-      `;
-
-      const listContainer = document.getElementById('run-detail-questions-list');
-      if (!run.questionsLog || run.questionsLog.length === 0) {
-        listContainer.innerHTML = '<div style="color:#64748b; text-align:center; padding:12px; font-size:11px;">Aucun calcul détaillé sauvegardé.</div>';
-      } else {
-        listContainer.innerHTML = run.questionsLog.map((q, i) => `
-          <div style="padding:6px 8px; border-radius:8px; background:${q.correct ? 'rgba(6,78,59,0.3)' : 'rgba(136,19,55,0.3)'}; border:1px solid ${q.correct ? 'rgba(52,211,153,0.3)' : 'rgba(244,63,94,0.3)'};">
-            <div style="display:flex; justify-content:space-between; font-size:9px; font-weight:700; color:#94a3b8;">
-              <span>#${i + 1}</span>
-              <span style="color:${q.correct ? '#34d399' : '#fb7185'};">${q.correct ? '✓ Réussi' : (q.timeout ? '⏳ Temps écoulé' : '✕ Erreur')}</span>
-            </div>
-            <div class="font-num" style="font-size:12px; font-weight:600; color:#e2e8f0; margin-top:2px;">${q.question}</div>
-            <div class="font-num" style="font-size:10px; margin-top:2px;">
-              <span style="color:#94a3b8;">Réponse : </span>
-              <strong style="color:${q.correct ? '#6ee7b7' : '#fda4af'}; ${!q.correct ? 'text-decoration:line-through;' : ''}">${q.userAnswer}</strong>
-              ${!q.correct ? `<span style="color:#94a3b8; margin-left:6px;">Attendu : <strong style="color:#6ee7b7;">${q.expectedAnswer}</strong></span>` : ''}
-            </div>
-          </div>
-        `).join('');
-      }
-
-      document.getElementById('run-detail-modal').classList.remove('hidden');
-    }
-
-    function closeRunDetail() {
-      document.getElementById('run-detail-modal').classList.add('hidden');
-    }
-
-    function clearRunHistory() {
-      try { localStorage.removeItem(STORAGE_KEY_RUNS); } catch (e) {}
-      renderRunsHistory();
-    }
-
-    const worldEnemies = {
-      1: [{ name: "Loup Sylvestre", icon: "🐺", hp: 3 }, { name: "Gobelin des Bois", icon: "👺", hp: 3 }, { name: "Gólem d'Écorce", icon: "🪵", hp: 4 }],
-      2: [{ name: "Gargouille de Pierre", icon: "🦇", hp: 3 }, { name: "Chevalier Obscur", icon: "🛡️", hp: 4 }, { name: "Minotaure Doré", icon: "🐂", hp: 4 }],
-      3: [{ name: "Spectre Décimal", icon: "👻", hp: 3 }, { name: "Sphinx des Nombres", icon: "🦁", hp: 4 }, { name: "Ancien Titan", icon: "🗿", hp: 4 }],
-      4: [{ name: "Démon des Flammes", icon: "🔥", hp: 4 }, { name: "Sorcier Sombre", icon: "🧙‍♂️", hp: 4 }, { name: "Dragon des Nombres", icon: "🐲", hp: 5 }],
-      5: [{ name: "Chouette Érudite", icon: "🦉", hp: 3 }, { name: "Génie des Marchands", icon: "🧞‍♂️", hp: 4 }, { name: "Sphinx des Mystères", icon: "🧮", hp: 4 }],
-      6: [{ name: "Spectre Chronos", icon: "⏳", hp: 3 }, { name: "Gardien des Horloges", icon: "🕰️", hp: 4 }, { name: "Maître du Temps", icon: "⚡", hp: 5 }]
-    };
-
-    function rand(min, max) {
+    // --- GÉNÉRATEUR DE QUESTIONS DYNAMIQUE & RÉVISION ---
+    function randInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    /* BANQUE DE QUESTIONS ÉTENDUE ET VARIÉE (CM2 / 6ème) */
     function generateQuestion(worldId) {
-      let q = "", ans = 0, hint = "";
+      // 25% de chance de reproposer une ancienne erreur (Révision intelligente)
+      const worldMistakes = saveState.mistakeQueue.filter(m => m.worldId === worldId);
+      if (worldMistakes.length > 0 && Math.random() < 0.3) {
+        const mistake = worldMistakes[0];
+        document.getElementById('reviewBadge').style.display = 'inline-block';
+        return Object.assign({}, mistake, { isReview: true });
+      }
+      document.getElementById('reviewBadge').style.display = 'none';
 
-      switch (worldId) {
-        case 1: { // Forêt des Additions & Soustractions
-          const type = rand(1, 6);
-          if (type === 1) { // Additions avec 9 ou 8 (astuce +10 -1)
-            const d1 = rand(2, 6) * 10 + 9;
-            const d2 = rand(2, 4) * 10 + rand(3, 8);
-            ans = d1 + d2;
-            q = `${d1} + ${d2}`;
-            hint = `Ajouter ${d1} revient à ajouter ${d1 + 1} puis à retirer 1 : (${d1 + 1} + ${d2}) - 1 = ${ans}.`;
-          } else if (type === 2) { // Compléments à 100
-            const start = rand(21, 89);
-            ans = 100 - start;
-            q = `${start} + ... = 100`;
-            hint = `Complément à 100 : va à la dizaine suivante (+${10 - (start % 10)}), puis à 100 (+${Math.floor((100 - start) / 10) * 10}) = ${ans}.`;
-          } else if (type === 3) { // Compléments à 1000
-            const a = rand(12, 88) * 10;
-            ans = 1000 - a;
-            q = `${a} + ... = 1000`;
-            hint = `Complément à 1000 : 1000 - ${a} = ${ans}.`;
-          } else if (type === 4) { // Soustraction astucieuse avec 9 ou 8 (retirer la dizaine supérieure)
-            const total = rand(55, 98);
-            const sub = rand(1, 3) * 10 + 9; // 19, 29 ou 39
-            ans = total - sub;
-            q = `${total} - ${sub}`;
-            hint = `Pour soustraire ${sub}, soustrais ${sub + 1} puis rajoute 1 ! (${total} - ${sub + 1}) + 1 = ${ans}.`;
-          } else if (type === 5) { // Somme de 3 nombres (regroupement malin)
-            const aUnits = rand(1, 9);
-            const bUnits = 10 - aUnits;
-            const cUnits = rand(2, 7);
-            const a = rand(1, 4) * 10 + aUnits;
-            const b = rand(1, 3) * 10 + bUnits;
-            const c = rand(1, 3) * 10 + cUnits;
-            ans = a + b + c;
-            q = `${a} + ${b} + ${c}`;
-            hint = `Regroupe les compléments à 10 : ${a} + ${b} = ${a + b}, puis ajoute ${c} = ${ans} !`;
-          } else { // Complément à 10 000
-            const base = rand(2, 8) * 1000 + rand(1, 9) * 100;
-            ans = 10000 - base;
-            q = `${base} + ... = 10 000`;
-            hint = `Pour atteindre 10 000 : 10 000 - ${base} = ${ans}.`;
-          }
-          break;
-        }
+      let expr = "", ans = 0, text = "", hint = "";
 
-        case 2: { // Donjon des Multiplications & Divisions
-          const type = rand(1, 6);
-          if (type === 1) { // Tables de 6 à 9
-            const t = rand(6, 9), n = rand(6, 9);
-            ans = t * n;
-            q = `${t} × ${n}`;
-            hint = `Table réflexe : ${t} × ${n} = ${ans}.`;
-          } else if (type === 2) { // Carrés parfaits (jusqu'à 15)
-            const sq = rand(6, 15);
-            ans = sq * sq;
-            q = `${sq} × ${sq}`;
-            hint = `Carré parfait : le nombre multiplié par lui-même. ${sq} × ${sq} = ${ans}.`;
-          } else if (type === 3) { // Multiplications par dizaines entières
-            const a = rand(2, 6) * 10;
-            const b = rand(3, 7) * 10;
-            ans = a * b;
-            q = `${a} × ${b}`;
-            hint = `Multiplie les chiffres non nuls (${a / 10} × ${b / 10} = ${(a / 10) * (b / 10)}), puis ajoute les 2 zéros = ${ans} !`;
-          } else if (type === 4) { // Divisions exactes (inverses de tables)
-            const div = rand(6, 9);
-            ans = rand(4, 9);
-            const mult = div * ans;
-            q = `${mult} ÷ ${div}`;
-            hint = `Division : cherche dans la table de ${div} : ${div} × ${ans} = ${mult}.`;
-          } else if (type === 5) { // Multiplication par 12 à 15 (décomposition)
-            const a = rand(4, 8);
-            const b = rand(12, 15);
-            ans = a * b;
-            q = `${a} × ${b}`;
-            hint = `Décompose : (${a} × 10) + (${a} × ${b - 10}) = ${a * 10} + ${a * (b - 10)} = ${ans} !`;
-          } else { // Moitiés et tiers de nombres ronds
-            const mult = rand(2, 3);
-            ans = rand(12, 45) * 10;
-            const total = ans * mult;
-            q = `${mult === 2 ? 'La moitié' : 'Le tiers'} de ${total}`;
-            hint = `${mult === 2 ? 'Divise par 2' : 'Divise par 3'} : ${total} ÷ ${mult} = ${ans}.`;
-          }
-          break;
+      if (worldId === 1) {
+        const t = randInt(0, 2);
+        if (t === 0) {
+          const a = randInt(18, 68), b = randInt(12, 39);
+          ans = a + b; expr = `${a} + ${b} =`;
+          hint = `💡 Ajoute d'abord les dizaines : ${a} + ${Math.floor(b/10)*10} = ${a + Math.floor(b/10)*10}, puis ajoute ${b%10} = ${ans}.`;
+        } else if (t === 1) {
+          const a = randInt(45, 95), b = randInt(13, 38);
+          ans = a - b; expr = `${a} - ${b} =`;
+          hint = `💡 Recule par étapes : ${a} - ${Math.floor(b/10)*10} = ${a - Math.floor(b/10)*10}, puis enlève ${b%10} = ${ans}.`;
+        } else {
+          const a = randInt(15, 88);
+          ans = 100 - a; expr = `${a} + ? = 100`;
+          hint = `💡 Complément à 100 : De ${a} à ${Math.ceil(a/10)*10} il faut ${Math.ceil(a/10)*10 - a}, puis ${100 - Math.ceil(a/10)*10} pour arriver à 100. Total = ${ans}.`;
         }
+      } 
+      else if (worldId === 2) {
+        const a = randInt(6, 9), b = randInt(4, 9);
+        ans = a * b; expr = `${a} × ${b} =`;
+        hint = `💡 Astuce table de ${a} : (${a} × 5 = ${a*5}), puis ajuste pour arriver à ${a} × ${b} = ${ans}.`;
+      } 
+      else if (worldId === 3) {
+        // VRAIS DÉCIMAUX NIVEAU 6e
+        const t = randInt(0, 3);
+        if (t === 0) {
+          // ex: 3,4 × 10 = 34
+          const whole = randInt(1, 19), dec = randInt(1, 9);
+          const numStr = `${whole},${dec}`;
+          ans = whole * 10 + dec;
+          expr = `${numStr} × 10 =`;
+          hint = `💡 Multiplier par 10 décale la virgule d'un rang vers la droite : ${numStr} × 10 = ${ans}.`;
+        } else if (t === 1) {
+          // ex: 25 ÷ 10 = 2,5
+          const num = randInt(12, 89);
+          if (num % 10 === 0) num += 3;
+          ans = num / 10;
+          expr = `${num} ÷ 10 =`;
+          hint = `💡 Diviser par 10 décale la virgule d'un rang vers la gauche : ${num} ÷ 10 = ${ans.toString().replace('.', ',')}.`;
+        } else if (t === 2) {
+          // Addition décimale simple : ex 1,5 + 2,5 ou 2,4 + 1,3
+          const a = randInt(11, 35) / 10, b = randInt(11, 24) / 10;
+          ans = Math.round((a + b) * 10) / 10;
+          expr = `${a.toString().replace('.', ',')} + ${b.toString().replace('.', ',')} =`;
+          hint = `💡 Additionne les dixièmes ensemble puis les unités : résultat = ${ans.toString().replace('.', ',')}.`;
+        } else {
+          // Complément décimal à l'entier : ex 3,6 + ? = 4
+          const target = randInt(2, 9);
+          const dec = randInt(1, 9);
+          const start = target - (dec / 10);
+          ans = (10 - dec) / 10;
+          expr = `${start.toString().replace('.', ',')} + ? = ${target}`;
+          hint = `💡 Il manque ${10 - dec} dixièmes pour faire 1 unité complète, soit 0,${10 - dec}.`;
+        }
+      } 
+      else if (worldId === 4) {
+        const t = randInt(0, 2);
+        if (t === 0) {
+          const a = randInt(16, 48);
+          ans = a * 2; expr = `Double de ${a} =`;
+          hint = `💡 Double de ${Math.floor(a/10)*10} (${Math.floor(a/10)*20}) + double de ${a%10} (${(a%10)*2}) = ${ans}.`;
+        } else if (t === 1) {
+          const a = randInt(12, 45) * 2;
+          ans = a / 2; expr = `Moitié de ${a} =`;
+          hint = `💡 Moitié de ${Math.floor(a/10)*10} (${Math.floor(a/10)*5}) + moitié de ${a%10} (${(a%10)/2}) = ${ans}.`;
+        } else {
+          const a = randInt(4, 9);
+          ans = a * 9; expr = `${a} × 9 =`;
+          hint = `💡 Astuce du ×9 : Fais ${a} × 10 = ${a*10}, puis enlève ${a} = ${ans}.`;
+        }
+      } 
+      else if (worldId === 5) {
+        // GÉNÉRATEUR DE PROBLÈMES INFINIS
+        const names = ["Emma", "Lucas", "Chloé", "Inès", "Hugo", "Léa", "Nathan"];
+        const name = names[randInt(0, names.length - 1)];
+        const pType = randInt(0, 5);
 
-        case 3: { // Marais des Décimaux
-          const type = rand(1, 6);
-          if (type === 1) { // × 10, × 100
-            const intP = rand(1, 35);
-            const decP = rand(1, 9);
-            const is100 = rand(0, 1) === 1;
-            const val = parseFloat(`${intP}.${decP}`);
-            ans = is100 ? Math.round(val * 100) : Math.round(val * 10 * 10) / 10;
-            q = `${val.toString().replace('.', ',')} × ${is100 ? 100 : 10}`;
-            hint = `Multiplier par ${is100 ? 100 : 10} décale la virgule de ${is100 ? '2 rangs' : '1 rang'} vers la droite = ${ans.toString().replace('.', ',')}.`;
-          } else if (type === 2) { // Somme de décimaux
-            const a = rand(1, 9) + rand(1, 9) / 10;
-            const b = rand(1, 9) + rand(1, 9) / 10;
-            ans = Math.round((a + b) * 10) / 10;
-            q = `${a.toFixed(1).replace('.', ',')} + ${b.toFixed(1).replace('.', ',')}`;
-            hint = `Additionne les parties entières (${Math.floor(a)} + ${Math.floor(b)}) puis les dixièmes = ${ans.toString().replace('.', ',')}.`;
-          } else if (type === 3) { // Complément à l'unité supérieure (ex: 0,3 + ... = 1 ou 3,4 + ... = 4)
-            const baseInt = rand(0, 5);
-            const tenths = rand(1, 9);
-            const current = parseFloat(`${baseInt}.${tenths}`);
-            const target = baseInt + 1;
-            ans = Math.round((target - current) * 10) / 10;
-            q = `${current.toString().replace('.', ',')} + ... = ${target}`;
-            hint = `Combien de dixièmes manquent pour faire une unité ? Il manque ${10 - tenths} dixièmes, soit ${ans.toString().replace('.', ',')} !`;
-          } else if (type === 4) { // Soustraction Entier - Décimal (ex: 5 - 1,4 = 3,6)
-            const integerVal = rand(3, 10);
-            const sub = rand(1, integerVal - 2) + rand(1, 9) / 10;
-            ans = Math.round((integerVal - sub) * 10) / 10;
-            q = `${integerVal} - ${sub.toFixed(1).replace('.', ',')}`;
-            hint = `Retire d'abord l'entier (${integerVal} - ${Math.floor(sub)} = ${integerVal - Math.floor(sub)}), puis les dixièmes : - 0,${Math.round((sub % 1) * 10)} = ${ans.toString().replace('.', ',')} !`;
-          } else if (type === 5) { // ÷ 10 et ÷ 100
-            const n = rand(12, 98) * 10;
-            const is100 = rand(0, 1) === 1;
-            ans = is100 ? Math.round((n / 100) * 10) / 10 : n / 10;
-            q = `${n} ÷ ${is100 ? 100 : 10}`;
-            hint = `Diviser par ${is100 ? 100 : 10} décale la virgule de ${is100 ? '2 rangs' : '1 rang'} vers la gauche = ${ans.toString().replace('.', ',')}.`;
-          } else { // Conversion d'unités de mesure (m en cm, kg en g)
-            const m = rand(1, 8) + (rand(1, 9) / 10);
-            ans = Math.round(m * 100);
-            q = `${m.toString().replace('.', ',')} m = ... cm`;
-            hint = `1 m = 100 cm ! Multiplie par 100 en décalant la virgule de 2 rangs : ${m.toString().replace('.', ',')} m = ${ans} cm.`;
-          }
-          break;
+        if (pType === 0) {
+          const qty = randInt(3, 7), price = randInt(4, 9);
+          ans = qty * price;
+          text = `${name} achète ${qty} mangas à ${price} € l'unité. Combien paie-t-elle en tout ?`;
+          expr = `${qty} × ${price} =`;
+          hint = `💡 ${qty} fois ${price} € = ${ans} €.`;
+        } else if (pType === 1) {
+          const bill = [20, 50][randInt(0, 1)];
+          const cost = randInt(11, bill - 4);
+          ans = bill - cost;
+          text = `${name} donne un billet de ${bill} € pour payer un jeu à ${cost} €. Combien lui rend-on ?`;
+          expr = `${bill} - ${cost} =`;
+          hint = `💡 Pour aller de ${cost} € à ${bill} €, on rend ${ans} €.`;
+        } else if (pType === 2) {
+          const boxes = randInt(4, 8), perBox = 6;
+          const total = boxes * perBox;
+          ans = boxes;
+          text = `On range ${total} macarons dans des boîtes de ${perBox}. Combien de boîtes remplit-on ?`;
+          expr = `${total} ÷ ${perBox} =`;
+          hint = `💡 Cherche dans la table de ${perBox} : ${boxes} × ${perBox} = ${total}. Il faut ${boxes} boîtes.`;
+        } else if (pType === 3) {
+          const L = randInt(6, 15), l = randInt(3, 8);
+          ans = (L + l) * 2;
+          text = `Un terrain rectangulaire mesure ${L} m de long et ${l} m de large. Quel est son périmètre ?`;
+          expr = `(${L} + ${l}) × 2 =`;
+          hint = `💡 Périmètre du rectangle = (${L} + ${l}) × 2 = ${L+l} × 2 = ${ans} m.`;
+        } else if (pType === 4) {
+          const startMin = randInt(10, 35), dur = randInt(15, 24);
+          ans = startMin + dur;
+          text = `Un train part à 14h${startMin} et le trajet dure ${dur} minutes. À quelle minute arrive-t-il (14h...) ?`;
+          expr = `${startMin} + ${dur} =`;
+          hint = `💡 Additionne les minutes : ${startMin} + ${dur} = ${ans} (il arrive à 14h${ans}).`;
+        } else {
+          // Problème avec décimaux (boulangerie)
+          const p1 = 1.5, qty = randInt(2, 4);
+          ans = p1 * qty;
+          text = `À la boulangerie, une brioche coûte 1,5 € (1€50). Combien coûtent ${qty} brioches ?`;
+          expr = `${qty} × 1,5 =`;
+          hint = `💡 ${qty} × 1 € = ${qty} €, plus ${qty} × 0,5 € = ${qty*0.5} €. Total = ${ans.toString().replace('.', ',')} €.`;
         }
-
-        case 4: { // Repaire du Boss : Astuces Expertes
-          const type = rand(1, 6);
-          if (type === 1) { // × 5 (faire × 10 puis ÷ 2)
-            const a = rand(12, 68);
-            ans = a * 5;
-            q = `${a} × 5`;
-            hint = `Astuce × 5 : multiplie par 10 (${a * 10}) puis prends la moitié = ${ans}.`;
-          } else if (type === 2) { // × 25 (faire × 100 puis ÷ 4)
-            const a = rand(4, 24) * 2;
-            ans = a * 25;
-            q = `${a} × 25`;
-            hint = `Astuce × 25 : multiplie par 100 (${a * 100}) puis divise par 4 = ${ans}.`;
-          } else if (type === 3) { // × 11
-            const a = rand(11, 45);
-            ans = a * 11;
-            q = `${a} × 11`;
-            hint = `Astuce × 11 : fais (${a} × 10) + ${a} = ${a * 10} + ${a} = ${ans} !`;
-          } else if (type === 4) { // × 50 (faire × 100 puis ÷ 2)
-            const a = rand(6, 44) * 2; // pair
-            ans = a * 50;
-            q = `${a} × 50`;
-            hint = `Astuce × 50 : multiplie par 100 (${a * 100}) puis prends la moitié = ${ans} !`;
-          } else if (type === 5) { // × 9 (faire × 10 - le nombre)
-            const a = rand(12, 42);
-            ans = a * 9;
-            q = `${a} × 9`;
-            hint = `Astuce × 9 : fais (${a} × 10) - ${a} = ${a * 10} - ${a} = ${ans} !`;
-          } else { // Multiplier par 0,5 (prendre la moitié)
-            const a = rand(14, 88) * 2; // nombre pair
-            ans = a / 2;
-            q = `${a} × 0,5`;
-            hint = `Multiplier par 0,5 revient toujours à diviser par 2 ! La moitié de ${a} est ${ans}.`;
-          }
-          break;
-        }
-
-        case 5: { // Labyrinthe des Énigmes
-          const pType = rand(1, 6);
-          if (pType === 1) { // Rendu de monnaie
-            const cost = rand(12, 43);
-            ans = 50 - cost;
-            q = `Livre à ${cost}€ payé avec un billet de 50€. Rendu ?`;
-            hint = `50 - ${cost} = ${ans}€.`;
-          } else if (pType === 2) { // Partage équitable
-            const friends = rand(3, 7);
-            const each = rand(5, 9);
-            ans = each;
-            q = `${friends} enfants partagent ${friends * each} cartes. Part de chacun ?`;
-            hint = `${friends * each} ÷ ${friends} = ${ans} cartes.`;
-          } else if (pType === 3) { // Écart horaire (avec retenue)
-            const startM = rand(15, 45);
-            const dur = rand(20, 50);
-            ans = dur;
-            const endM = (startM + dur) % 60;
-            const depH = 14;
-            const arrH = startM + dur >= 60 ? depH + 1 : depH;
-            const endStr = `${arrH}h${endM < 10 ? '0' + endM : endM}`;
-            q = `Départ à ${depH}h${startM}, arrivée à ${endStr}. Durée (minutes) ?`;
-            hint = `Calcule le temps jusqu'à l'heure pleine (${60 - startM} min) puis ajoute le reste (${endM} min) = ${ans} minutes.`;
-          } else if (pType === 4) { // Aire d'un rectangle
-            const L = rand(6, 12);
-            const l = rand(3, 6);
-            ans = L * l;
-            q = `Aire d'un rectangle de longueur ${L} cm et largeur ${l} cm ?`;
-            hint = `Aire = Longueur × largeur = ${L} × ${l} = ${ans} cm².`;
-          } else if (pType === 5) { // Réduction / Pourcentage (50% ou 10%)
-            const isHalf = rand(0, 1) === 1;
-            if (isHalf) {
-              const price = rand(12, 60) * 2;
-              ans = price / 2;
-              q = `Un manteau à ${price}€ a une réduction de 50%. Nouveau prix ?`;
-              hint = `50% correspond à la moitié ! ${price} ÷ 2 = ${ans}€.`;
-            } else {
-              const price = rand(2, 9) * 10;
-              ans = price - (price / 10);
-              q = `Un jeu à ${price}€ a une réduction de 10%. Nouveau prix ?`;
-              hint = `10% de ${price}€ fait ${price / 10}€. Nouveau prix : ${price} - ${price / 10} = ${ans}€.`;
-            }
-          } else { // Prix au lot
-            const nbItems = rand(3, 5);
-            const unitPrice = rand(2, 4);
-            ans = nbItems * unitPrice;
-            q = `Combien coûtent ${nbItems} cahiers à ${unitPrice}€ l'unité ?`;
-            hint = `${nbItems} × ${unitPrice}€ = ${ans}€.`;
-          }
-          break;
-        }
-
-        case 6: { // L'Arène du Temps (Réflexes rapides)
-          const cType = rand(1, 6);
-          if (cType === 1) { // Table pure
-            const a = rand(6, 9), b = rand(6, 9);
-            ans = a * b;
-            q = `${a} × ${b}`;
-            hint = `Réflexe : ${a} × ${b} = ${ans}.`;
-          } else if (cType === 2) { // Double
-            const val = rand(16, 49);
-            ans = val * 2;
-            q = `Double de ${val}`;
-            hint = `Double les dizaines (${Math.floor(val / 10) * 20}) et unités (${(val % 10) * 2}) = ${ans}.`;
-          } else if (cType === 3) { // Moitié
-            const half = rand(14, 48);
-            ans = half;
-            q = `Moitié de ${half * 2}`;
-            hint = `La moitié de ${half * 2} est ${half}.`;
-          } else if (cType === 4) { // Quadruple (x4 = doubler deux fois)
-            const val = rand(11, 24);
-            ans = val * 4;
-            q = `Quadruple de ${val}`;
-            hint = `Double deux fois : le double de ${val} est ${val * 2}, et le double de ${val * 2} est ${ans} !`;
-          } else if (cType === 5) { // Complément à 60 (réflexe minutes / horloge)
-            const a = rand(15, 55);
-            ans = 60 - a;
-            q = `${a} + ... = 60`;
-            hint = `Complément à 60 : 60 - ${a} = ${ans}.`;
-          } else { // Multiplication par 100
-            const a = rand(12, 85);
-            ans = a * 100;
-            q = `${a} × 100`;
-            hint = `Ajoute simplement deux zéros : ${a} × 100 = ${ans}.`;
-          }
-          break;
-        }
+      } 
+      else if (worldId === 6) {
+        const a = randInt(3, 9), b = randInt(4, 9);
+        ans = a * b; expr = `${a} × ${b} =`;
+        hint = `💡 Réflexe : ${a} × ${b} = ${ans}.`;
       }
 
-      return { question: q, answerStr: ans.toString().replace('.', ','), hint };
+      return { expr, ans, text, hint, worldId };
     }
 
-    function stopChrono() {
-      if (gameState.timerInterval) {
-        clearInterval(gameState.timerInterval);
-        gameState.timerInterval = null;
+    // --- ANIMATIONS DES MONSTRES ---
+    function triggerMonsterAnim(animClass) {
+      const el = document.getElementById('enemyAvatar');
+      el.classList.remove('anim-hit', 'anim-attack', 'anim-die', 'anim-spawn');
+      void el.offsetWidth; // Force reflow
+      el.classList.add(animClass);
+      setTimeout(() => {
+        el.classList.remove(animClass);
+      }, 560);
+    }
+
+    function showSlashAndDamage(text, color = 'var(--gold)') {
+      const slash = document.getElementById('slashEffect');
+      slash.classList.remove('active');
+      void slash.offsetWidth;
+      slash.classList.add('active');
+
+      const dmg = document.getElementById('floatingDmg');
+      dmg.textContent = text;
+      dmg.style.color = color;
+      dmg.classList.remove('show');
+      void dmg.offsetWidth;
+      dmg.classList.add('show');
+    }
+
+    function updateMonsterUI() {
+      const w = WORLDS.find(x => x.id === currentWorld);
+      const m = w.monsters[monsterIndex % w.monsters.length];
+      const avatarEl = document.getElementById('enemyAvatar');
+      avatarEl.textContent = m.icon;
+      if (m.boss) avatarEl.classList.add('boss-aura');
+      else avatarEl.classList.remove('boss-aura');
+
+      document.getElementById('enemyName').textContent = m.name;
+      const pct = Math.max(0, (monsterHp / monsterMaxHp) * 100);
+      document.getElementById('enemyHpFill').style.width = pct + '%';
+      document.getElementById('enemyHpText').textContent = `${monsterHp}/${monsterMaxHp} PV`;
+    }
+
+    function updateHeader() {
+      document.getElementById('playerIcon').textContent = saveState.avatar;
+      document.getElementById('coinCount').textContent = saveState.coins;
+      document.getElementById('playerRank').textContent = `Niv. ${saveState.level}`;
+      document.getElementById('shieldIcon').style.display = saveState.hasShield ? 'inline' : 'none';
+      
+      let heartsHtml = '';
+      for (let i = 0; i < 3; i++) heartsHtml += i < hearts ? '❤️' : '🖤';
+      document.getElementById('heartsDisplay').innerHTML = heartsHtml;
+    }
+
+    function selectWorld(id) {
+      currentWorld = id;
+      monsterIndex = 0;
+      monsterMaxHp = 5;
+      monsterHp = 5;
+
+      const w = WORLDS.find(item => item.id === id);
+      document.getElementById('worldTitle').textContent = `${w.icon} ${w.id}. ${w.name}`;
+      document.getElementById('timerContainer').style.display = (id === 6) ? 'flex' : 'none';
+      document.getElementById('modalWorlds').style.display = 'none';
+
+      updateMonsterUI();
+      triggerMonsterAnim('anim-spawn');
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      currentInput = "";
+      document.getElementById('answerSlot').textContent = "?";
+      currentQuestion = generateQuestion(currentWorld);
+
+      const probBox = document.getElementById('problemText');
+      if (currentQuestion.text) {
+        probBox.textContent = currentQuestion.text;
+        probBox.style.display = 'block';
+        document.getElementById('questionLabel').textContent = "PROBLÈME DU QUOTIDIEN";
+      } else {
+        probBox.style.display = 'none';
+        document.getElementById('questionLabel').textContent = currentQuestion.isReview ? "DÉFI REVANCHE 🧠" : "RÉSOUS L'ÉNIGME";
       }
+
+      document.getElementById('calcExpr').textContent = currentQuestion.expr;
+      if (currentWorld === 6) startChrono();
+      else stopChrono();
+    }
+
+    // --- CHRONO ---
+    function stopChrono() {
+      if (chronoInterval) clearInterval(chronoInterval);
+      chronoInterval = null;
     }
 
     function startChrono() {
       stopChrono();
-      if (gameState.world !== 6) {
-        DOM.chronoContainer.classList.add('hidden');
-        return;
-      }
-      DOM.chronoContainer.classList.remove('hidden');
-      DOM.chronoContainer.style.display = 'flex';
-
-      gameState.timeLimit = 10;
-      gameState.timeLeft = 10;
-      gameState.questionStartTime = Date.now();
-      updateChronoDisplay();
-
-      gameState.timerInterval = setInterval(() => {
-        gameState.timeLeft -= 0.1;
-        if (gameState.timeLeft <= 0) {
-          gameState.timeLeft = 0;
-          updateChronoDisplay();
+      chronoRemaining = 10.0;
+      updateChronoBar();
+      chronoInterval = setInterval(() => {
+        chronoRemaining -= 0.1;
+        if (chronoRemaining <= 0) {
+          chronoRemaining = 0;
+          updateChronoBar();
           stopChrono();
-          handleTimeOut();
+          handleMistake("⏳ Temps écoulé !");
         } else {
-          updateChronoDisplay();
-          if (gameState.timeLeft <= 3.05 && Math.floor(gameState.timeLeft * 10) % 10 === 0) {
-            audio.playTick();
-          }
+          updateChronoBar();
         }
       }, 100);
     }
 
-    function updateChronoDisplay() {
-      const pct = Math.max(0, (gameState.timeLeft / gameState.timeLimit) * 100);
-      DOM.chronoBar.style.width = pct + '%';
-      DOM.chronoSeconds.innerText = Math.ceil(gameState.timeLeft) + 's';
-      if (pct > 50) {
-        DOM.chronoBar.style.background = 'linear-gradient(to right, #34d399, #14b8a6)';
-      } else if (pct > 25) {
-        DOM.chronoBar.style.background = 'linear-gradient(to right, #fbbf24, #ea580c)';
-      } else {
-        DOM.chronoBar.style.background = 'linear-gradient(to right, #ef4444, #b91c1c)';
-      }
+    function updateChronoBar() {
+      const pct = Math.max(0, (chronoRemaining / 10.0) * 100);
+      const bar = document.getElementById('timerBar');
+      bar.style.width = pct + '%';
+      document.getElementById('timerText').textContent = chronoRemaining.toFixed(1) + 's';
+      bar.style.backgroundColor = chronoRemaining > 5 ? 'var(--green)' : (chronoRemaining > 2.5 ? 'var(--gold)' : 'var(--red)');
     }
 
-    function handleTimeOut() {
-      audio.playAlarm();
-      gameState.currentRunLog.push({
-        question: gameState.currentQuestionText,
-        userAnswer: gameState.currentInput.trim() || '(Aucune réponse)',
-        expectedAnswer: gameState.expectedAnswerStr,
-        correct: false,
-        timeout: true
-      });
-      gameState.playerHP -= 1;
-      gameState.streak = 0;
-      updatePlayerStats();
-
-      document.getElementById('explain-question').innerText = gameState.currentQuestionText;
-      document.getElementById('explain-answer').innerText = gameState.expectedAnswerStr;
-      document.getElementById('explain-step-by-step').innerText = "⏳ Temps écoulé ! En mode chrono : 10 secondes par énigme. " + gameState.teachingHint;
-      document.getElementById('explanation-modal').classList.remove('hidden');
-    }
-
-    function launchWorld(worldId) {
+    // --- VÉRIFICATION DE LA RÉPONSE ---
+    function submitAnswer() {
+      if (!currentInput || currentInput === ".") return;
       stopChrono();
-      audio.init();
-      gameState.world = worldId;
-      gameState.monsterLevel = 1;
-      gameState.playerHP = gameState.maxHP;
-      gameState.streak = 0;
-      gameState.maxStreakRound = 0;
-      gameState.goldEarnedRound = 0;
-      gameState.currentRunLog = [];
+      const val = parseFloat(currentInput);
 
-      document.getElementById('world-select-overlay').classList.add('hidden');
-      setupMonster();
-      updatePlayerStats();
-      loadNextQuestion();
-    }
+      if (Math.abs(val - currentQuestion.ans) < 0.001) {
+        // BONNE RÉPONSE !
+        sound.playHit();
 
-    function openWorldMenu() {
-      stopChrono();
-      renderRunsHistory();
-      DOM.chronoContainer.classList.add('hidden');
-      document.getElementById('end-dialog').classList.add('hidden');
-      document.getElementById('explanation-modal').classList.add('hidden');
-      document.getElementById('run-detail-modal').classList.add('hidden');
-      document.getElementById('menu-total-wins').innerText = gameState.totalWins;
-      document.getElementById('menu-total-coins').innerText = gameState.gold + " 🪙";
-      document.getElementById('world-select-overlay').classList.remove('hidden');
-    }
-
-    function updatePlayerStats() {
-      let hearts = '';
-      for (let i = 0; i < gameState.maxHP; i++) {
-        hearts += `<span style="opacity:${i < gameState.playerHP ? '1' : '0.2'}">❤️</span>`;
-      }
-      DOM.heartsContainer.innerHTML = hearts;
-      DOM.goldDisplay.innerText = gameState.gold;
-
-      if (gameState.streak >= 2) {
-        DOM.streakBadge.classList.remove('hidden');
-        DOM.comboCount.innerText = gameState.streak;
-      } else {
-        DOM.streakBadge.classList.add('hidden');
-      }
-
-      const worldNames = {
-        1: { name: "1. Forêt des Additions", icon: "🌲" },
-        2: { name: "2. Donjon Multiplications", icon: "🏰" },
-        3: { name: "3. Marais des Décimaux", icon: "🏛️" },
-        4: { name: "4. Repaire du Boss", icon: "🌋" },
-        5: { name: "5. Labyrinthe des Énigmes", icon: "📜" },
-        6: { name: "6. L'Arène du Temps", icon: "⏱️" }
-      };
-      DOM.worldTitle.innerText = worldNames[gameState.world].name;
-      DOM.worldIcon.innerText = worldNames[gameState.world].icon;
-
-      DOM.playerAvatar.innerText = gameState.activeSkin;
-      const avatarTitles = { '🧙‍♀️': 'Apprentie', '🧝‍♀️': 'Elfe', '🐉': 'Dragon' };
-      DOM.playerTitle.innerText = avatarTitles[gameState.activeSkin] || 'Héroïne';
-    }
-
-    function setupMonster() {
-      const enemies = worldEnemies[gameState.world];
-      const enemy = enemies[Math.min(gameState.monsterLevel - 1, enemies.length - 1)];
-      gameState.monsterMaxHP = enemy.hp;
-      gameState.monsterHP = enemy.hp;
-
-      DOM.monsterSprite.innerText = enemy.icon;
-      DOM.monsterName.innerText = enemy.name;
-      DOM.monsterLevel.innerText = gameState.monsterLevel;
-      updateMonsterHPBar();
-    }
-
-    function updateMonsterHPBar() {
-      const pct = Math.max(0, (gameState.monsterHP / gameState.monsterMaxHP) * 100);
-      DOM.monsterHpBar.style.width = pct + '%';
-      DOM.monsterHpBar.style.background = pct < 35 
-        ? 'linear-gradient(to right, #ef4444, #f87171)' 
-        : 'linear-gradient(to right, #10b981, #14b8a6)';
-      DOM.monsterHpText.innerText = `${gameState.monsterHP} / ${gameState.monsterMaxHP} PV`;
-    }
-
-    function loadNextQuestion() {
-      const data = generateQuestion(gameState.world);
-      gameState.currentQuestionText = data.question;
-      gameState.expectedAnswerStr = data.answerStr;
-      gameState.teachingHint = data.hint;
-      gameState.currentInput = '';
-
-      DOM.mathProblem.innerText = data.question;
-      if (gameState.world === 5) {
-        DOM.mathProblem.style.fontSize = '13px';
-        DOM.equalSign.innerText = '👉';
-      } else {
-        DOM.mathProblem.style.fontSize = '24px';
-        DOM.equalSign.innerText = '=';
-      }
-
-      updateAnswerSlot();
-
-      if (gameState.world === 6) {
-        DOM.coachHint.innerText = "⚡ Vite ! Réponds avant les 10 secondes !";
-        startChrono();
-      } else {
-        DOM.coachHint.innerText = gameState.world === 5 ? "Trouve le bon résultat !" : "Trouve la bonne réponse pour frapper !";
-        stopChrono();
-      }
-    }
-
-    function updateAnswerSlot() {
-      if (gameState.currentInput === '') {
-        DOM.answerText.textContent = '?';
-        DOM.answerText.className = 'font-num slot-empty';
-      } else {
-        DOM.answerText.textContent = gameState.currentInput;
-        DOM.answerText.className = 'font-num';
-      }
-    }
-
-    function handleInputKey(key) {
-      if (key === 'del') {
-        if (gameState.currentInput.length > 0) {
-          gameState.currentInput = gameState.currentInput.slice(0, -1);
-          updateAnswerSlot();
+        // Si c'était une question de révision, on la retire de la liste des erreurs
+        if (currentQuestion.isReview) {
+          saveState.mistakeQueue = saveState.mistakeQueue.filter(m => m.expr !== currentQuestion.expr);
         }
-        return;
-      }
-      if (gameState.currentInput.length >= 6) return;
-      if (key === ',' && gameState.currentInput.includes(',')) return;
-      gameState.currentInput += key;
-      updateAnswerSlot();
-    }
 
-    function handleConfirmAnswer() {
-      audio.init();
-      if (gameState.currentInput.trim() === '') return;
+        monsterHp--;
+        saveState.coins += 2;
+        saveState.xp += 10;
+        saveState.completedCounts[currentWorld] = (saveState.completedCounts[currentWorld] || 0) + 1;
+        currentStreak++;
+        if (currentWorld === 6 && currentStreak > saveState.bestChronoStreak) {
+          saveState.bestChronoStreak = currentStreak;
+        }
+        if (saveState.xp >= saveState.level * 50) saveState.level++;
 
-      const userVal = gameState.currentInput.trim().replace('.', ',');
-      const targetVal = gameState.expectedAnswerStr;
+        if (monsterHp <= 0) {
+          // MONSTRE VAINCU !
+          sound.playMonsterKill();
+          saveState.monstersKilled++;
+          saveState.coins += 5; // Coffre bonus
+          showSlashAndDamage("💥 VAINCU ! +7 🪙", "var(--green)");
+          triggerMonsterAnim('anim-die');
+          updateMonsterUI();
+          saveProgress();
+          updateHeader();
 
-      if (userVal === targetVal) {
-        handleSuccess();
-      } else {
-        handleMistake();
-      }
-    }
-
-    function handleSuccess() {
-      stopChrono();
-      audio.playCorrect();
-      audio.playHit();
-
-      gameState.currentRunLog.push({
-        question: gameState.currentQuestionText,
-        userAnswer: gameState.currentInput.trim().replace('.', ','),
-        expectedAnswer: gameState.expectedAnswerStr,
-        correct: true,
-        timeout: false
-      });
-
-      const elapsed = (Date.now() - gameState.questionStartTime) / 1000;
-      let isSpeed = false;
-      if (gameState.world === 6 && elapsed < 3.5) {
-        isSpeed = true;
-        gameState.gold += 1;
-        gameState.goldEarnedRound += 1;
-        saveProfile();
-        DOM.chronoBonus.style.opacity = '1';
-        setTimeout(() => DOM.chronoBonus.style.opacity = '0', 700);
-      }
-
-      gameState.monsterHP -= 1;
-      gameState.streak += 1;
-      if (gameState.streak > gameState.maxStreakRound) {
-        gameState.maxStreakRound = gameState.streak;
-      }
-
-      DOM.monsterWrapper.classList.add('shake');
-      setTimeout(() => DOM.monsterWrapper.classList.remove('shake'), 280);
-
-      updateMonsterHPBar();
-      updatePlayerStats();
-
-      DOM.coachHint.innerText = isSpeed ? "⚡ Super rapide ! Bonus +1 🪙 !" : "✨ Bravo, coup réussi !";
-
-      if (gameState.monsterHP <= 0) {
-        setTimeout(handleMonsterDefeat, 350);
-      } else {
-        setTimeout(loadNextQuestion, 450);
-      }
-    }
-
-    function handleMistake() {
-      stopChrono();
-      audio.playMistake();
-
-      gameState.currentRunLog.push({
-        question: gameState.currentQuestionText,
-        userAnswer: gameState.currentInput.trim().replace('.', ','),
-        expectedAnswer: gameState.expectedAnswerStr,
-        correct: false,
-        timeout: false
-      });
-
-      gameState.playerHP -= 1;
-      gameState.streak = 0;
-      updatePlayerStats();
-
-      document.getElementById('explain-question').innerText = gameState.currentQuestionText;
-      document.getElementById('explain-answer').innerText = gameState.expectedAnswerStr;
-      document.getElementById('explain-step-by-step').innerText = gameState.teachingHint;
-      document.getElementById('explanation-modal').classList.remove('hidden');
-    }
-
-    function closeExplanation() {
-      document.getElementById('explanation-modal').classList.add('hidden');
-      gameState.currentInput = '';
-      updateAnswerSlot();
-
-      if (gameState.playerHP <= 0) {
-        showEndDialog(false);
-      } else {
-        loadNextQuestion();
-      }
-    }
-
-    function handleMonsterDefeat() {
-      audio.playVictory();
-      const gain = 2 + gameState.world;
-      gameState.gold += gain;
-      gameState.goldEarnedRound += gain;
-      gameState.totalWins += 1;
-      saveProfile();
-      updatePlayerStats();
-
-      if (gameState.monsterLevel < 3) {
-        gameState.monsterLevel += 1;
-        setupMonster();
-        loadNextQuestion();
-      } else {
-        showEndDialog(true);
-      }
-    }
-
-    function showEndDialog(isVictory) {
-      stopChrono();
-      saveRunRecord(isVictory);
-      saveProfile();
-
-      const dialog = document.getElementById('end-dialog');
-      const title = document.getElementById('end-title');
-      const desc = document.getElementById('end-desc');
-
-      if (isVictory) {
-        document.getElementById('end-icon').innerText = '👑';
-        title.innerText = 'Monde Conquis !';
-        title.style.color = '#fde047';
-        desc.innerText = gameState.world === 6 ? "Tu as vaincu le Maître du Temps avec brio !" : 'Félicitations aventurière ! Donjon triomphé !';
-      } else {
-        document.getElementById('end-icon').innerText = '🛡️';
-        title.innerText = 'Partie Terminée';
-        title.style.color = '#f43f5e';
-        desc.innerText = "Tes cœurs sont épuisés, chaque essai te rend plus forte !";
-      }
-
-      document.getElementById('end-gold-gain').innerText = `+${gameState.goldEarnedRound} 🪙`;
-      document.getElementById('end-max-combo').innerText = `${gameState.maxStreakRound} 🔥`;
-      dialog.classList.remove('hidden');
-    }
-
-    function retryCurrentWorld() {
-      document.getElementById('end-dialog').classList.add('hidden');
-      launchWorld(gameState.world);
-    }
-
-    function pokeMonster() {
-      audio.playHit();
-      DOM.monsterWrapper.classList.add('shake');
-      setTimeout(() => DOM.monsterWrapper.classList.remove('shake'), 280);
-    }
-
-    function toggleAudio() {
-      audio.init();
-      audio.enabled = !audio.enabled;
-      document.getElementById('audio-toggle-btn').innerText = audio.enabled ? '🔊' : '🔇';
-    }
-
-    function toggleShop() {
-      updateSkinButtons();
-      document.getElementById('shop-dialog').classList.toggle('hidden');
-    }
-
-    function updateSkinButtons() {
-      const btnMage = document.getElementById('btn-skin-mage');
-      const btnElf = document.getElementById('btn-skin-elf');
-      const btnDragon = document.getElementById('btn-skin-dragon');
-
-      if (btnMage) {
-        btnMage.innerText = gameState.activeSkin === '🧙‍♀️' ? 'Équipé ✓' : 'Équiper';
-        btnMage.style.background = gameState.activeSkin === '🧙‍♀️' ? '#059669' : '#4f46e5';
-      }
-      if (btnElf) {
-        if (gameState.unlockedSkins.includes('🧝‍♀️')) {
-          btnElf.innerText = gameState.activeSkin === '🧝‍♀️' ? 'Équipé ✓' : 'Équiper';
-          btnElf.style.background = gameState.activeSkin === '🧝‍♀️' ? '#059669' : '#4f46e5';
-          btnElf.style.color = '#fff';
+          setTimeout(() => {
+            monsterIndex++;
+            const w = WORLDS.find(x => x.id === currentWorld);
+            const nextM = w.monsters[monsterIndex % w.monsters.length];
+            monsterMaxHp = nextM.boss ? 7 : 5;
+            monsterHp = monsterMaxHp;
+            updateMonsterUI();
+            triggerMonsterAnim('anim-spawn');
+            nextQuestion();
+          }, 580);
         } else {
-          btnElf.innerText = '15 🪙';
-          btnElf.style.background = '#fbbf24';
-          btnElf.style.color = '#020617';
+          // COUP CLASSIQUE
+          showSlashAndDamage("-1 PV ⚔️ (+2 🪙)");
+          triggerMonsterAnim('anim-hit');
+          updateMonsterUI();
+          saveProgress();
+          updateHeader();
+          setTimeout(() => nextQuestion(), 420);
         }
+      } else {
+        handleMistake("Oups, le monstre contre-attaque !");
       }
-      if (btnDragon) {
-        if (gameState.unlockedSkins.includes('🐉')) {
-          btnDragon.innerText = gameState.activeSkin === '🐉' ? 'Équipé ✓' : 'Équiper';
-          btnDragon.style.background = gameState.activeSkin === '🐉' ? '#059669' : '#4f46e5';
-          btnDragon.style.color = '#fff';
-        } else {
-          btnDragon.innerText = '30 🪙';
-          btnDragon.style.background = '#fbbf24';
-          btnDragon.style.color = '#020617';
+    }
+
+    function handleMistake(title) {
+      sound.playError();
+      triggerMonsterAnim('anim-attack');
+      currentStreak = 0;
+
+      // Enregistrer dans la file de révision intelligente (max 10)
+      if (!saveState.mistakeQueue.some(m => m.expr === currentQuestion.expr)) {
+        saveState.mistakeQueue.push({
+          expr: currentQuestion.expr,
+          ans: currentQuestion.ans,
+          text: currentQuestion.text,
+          hint: currentQuestion.hint,
+          worldId: currentWorld
+        });
+        if (saveState.mistakeQueue.length > 10) saveState.mistakeQueue.shift();
+      }
+
+      if (saveState.hasShield) {
+        saveState.hasShield = false;
+        title = "🛡️ Ton Bouclier Magique t'a protégée !";
+      } else {
+        hearts = Math.max(0, hearts - 1);
+      }
+      saveProgress();
+      updateHeader();
+
+      const ansFormatted = currentQuestion.ans.toString().replace('.', ',');
+      document.getElementById('expModalTitle').textContent = title;
+      document.getElementById('hintSolution').textContent = `${currentQuestion.expr.replace('?', '')} ${ansFormatted}`;
+      document.getElementById('hintExplanation').textContent = currentQuestion.hint;
+      setTimeout(() => {
+        document.getElementById('modalExplanation').style.display = 'flex';
+      }, 350);
+    }
+
+    // --- CLAVIER TACTILE ---
+    document.querySelectorAll('.key-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sound.init();
+        const val = btn.dataset.val;
+        const action = btn.dataset.action;
+
+        if (val !== undefined) {
+          if (val === '.' && currentInput.includes('.')) return;
+          if (currentInput.length < 6) {
+            if (val === '.' && currentInput === '') currentInput = '0.';
+            else currentInput += val;
+            document.getElementById('answerSlot').textContent = currentInput.replace('.', ',');
+          }
+        } else if (action === 'clear') {
+          currentInput = currentInput.slice(0, -1);
+          document.getElementById('answerSlot').textContent = currentInput ? currentInput.replace('.', ',') : "?";
+        } else if (action === 'submit') {
+          submitAnswer();
         }
-      }
-    }
-
-    function setAvatar(emoji) {
-      gameState.activeSkin = emoji;
-      saveProfile();
-      updatePlayerStats();
-      toggleShop();
-    }
-
-    function buyAvatar(emoji, price) {
-      if (gameState.unlockedSkins.includes(emoji)) {
-        setAvatar(emoji);
-        return;
-      }
-      if (gameState.gold >= price) {
-        gameState.gold -= price;
-        gameState.unlockedSkins.push(emoji);
-        gameState.activeSkin = emoji;
-        saveProfile();
-        updatePlayerStats();
-        toggleShop();
-      }
-    }
-
-    /* Événements tactiles réactifs sans délai */
-    function attachFastKeyEvents() {
-      const grid = document.querySelector('.keyboard-grid');
-      const handlePress = (e) => {
-        const btn = e.target.closest('.key-btn');
-        if (!btn) return;
-        e.preventDefault();
-        const key = btn.getAttribute('data-k');
-        handleInputKey(key);
-      };
-      grid.addEventListener('pointerdown', handlePress, { passive: false });
-
-      const btnAttack = document.getElementById('btn-confirm-attack');
-      btnAttack.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        handleConfirmAnswer();
-      }, { passive: false });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      cacheDOM();
-      attachFastKeyEvents();
-      loadProfile();
-      updatePlayerStats();
-      renderRunsHistory();
-      openWorldMenu();
+      });
     });
+
+    // --- BOUTIQUE, MONDES & TROPHÉES ---
+    function renderShop() {
+      document.getElementById('shopCoins').textContent = saveState.coins;
+      const container = document.getElementById('shopList');
+      container.innerHTML = '';
+
+      SHOP_ITEMS.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        const isOwned = item.type === 'avatar' ? saveState.ownedAvatars.includes(item.id) : saveState.hasShield;
+        const isEquipped = item.type === 'avatar' && saveState.avatar === item.id;
+
+        let btnText = `${item.price} 🪙`;
+        if (isEquipped) btnText = "Équipé ✓";
+        else if (isOwned) btnText = item.type === 'avatar' ? "Choisir" : "Actif ✓";
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.8rem;">${item.icon}</span>
+            <div>
+              <div class="item-title">${item.name}</div>
+              <div class="item-desc">${item.desc}</div>
+            </div>
+          </div>
+          <button class="btn-buy ${isOwned ? 'owned' : ''}">${btnText}</button>
+        `;
+
+        div.querySelector('button').addEventListener('click', () => {
+          if (item.type === 'avatar') {
+            if (saveState.ownedAvatars.includes(item.id)) {
+              saveState.avatar = item.id;
+            } else if (saveState.coins >= item.price) {
+              saveState.coins -= item.price;
+              saveState.ownedAvatars.push(item.id);
+              saveState.avatar = item.id;
+              sound.playMonsterKill();
+            }
+          } else if (item.id === 'shield' && !saveState.hasShield && saveState.coins >= item.price) {
+            saveState.coins -= item.price;
+            saveState.hasShield = true;
+            sound.playMonsterKill();
+          }
+          saveProgress();
+          updateHeader();
+          renderShop();
+        });
+        container.appendChild(div);
+      });
+    }
+
+    function renderTrophies() {
+      const container = document.getElementById('trophiesList');
+      container.innerHTML = '';
+      TROPHIES.forEach(t => {
+        const unlocked = t.check();
+        const div = document.createElement('div');
+        div.className = `list-item ${unlocked ? 'active' : ''}`;
+        div.style.opacity = unlocked ? '1' : '0.45';
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.7rem;">${unlocked ? t.icon : '🔒'}</span>
+            <div>
+              <div class="item-title">${t.name}</div>
+              <div class="item-desc">${t.desc}</div>
+            </div>
+          </div>
+          <span style="font-size:0.75rem; font-weight:700; color:${unlocked ? 'var(--gold)' : 'var(--text-muted)'};">
+            ${unlocked ? 'Débloqué ⭐' : 'Verrouillé'}
+          </span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function renderWorldsList() {
+      const container = document.getElementById('worldsList');
+      container.innerHTML = '';
+      WORLDS.forEach(w => {
+        const div = document.createElement('div');
+        div.className = `list-item ${w.id === currentWorld ? 'active' : ''}`;
+        div.style.cursor = 'pointer';
+        const count = saveState.completedCounts[w.id] || 0;
+        div.innerHTML = `
+          <div>
+            <div class="item-title">${w.icon} ${w.id}. ${w.name}</div>
+            <div class="item-desc">${w.desc}</div>
+          </div>
+          <div style="text-align:right; font-size:0.75rem; color:var(--gold); font-weight:700;">
+            ⭐ ${count}
+          </div>
+        `;
+        div.addEventListener('click', () => selectWorld(w.id));
+        container.appendChild(div);
+      });
+    }
+
+    // --- ÉVÉNEMENTS BOUTONS ---
+    document.getElementById('btnCloseExplanation').addEventListener('click', () => {
+      document.getElementById('modalExplanation').style.display = 'none';
+      if (hearts <= 0) { hearts = 3; updateHeader(); }
+      nextQuestion();
+    });
+
+    document.getElementById('btnMap').addEventListener('click', () => {
+      renderWorldsList();
+      document.getElementById('modalWorlds').style.display = 'flex';
+    });
+    document.getElementById('btnChangeWorld').addEventListener('click', () => {
+      renderWorldsList();
+      document.getElementById('modalWorlds').style.display = 'flex';
+    });
+    document.getElementById('btnCloseWorlds').addEventListener('click', () => {
+      document.getElementById('modalWorlds').style.display = 'none';
+    });
+
+    document.getElementById('btnShop').addEventListener('click', () => {
+      renderShop();
+      document.getElementById('modalShop').style.display = 'flex';
+    });
+    document.getElementById('btnOpenShopFromAvatar').addEventListener('click', () => {
+      renderShop();
+      document.getElementById('modalShop').style.display = 'flex';
+    });
+    document.getElementById('btnCloseShop').addEventListener('click', () => {
+      document.getElementById('modalShop').style.display = 'none';
+    });
+
+    document.getElementById('btnTrophies').addEventListener('click', () => {
+      renderTrophies();
+      document.getElementById('modalTrophies').style.display = 'flex';
+    });
+    document.getElementById('btnCloseTrophies').addEventListener('click', () => {
+      document.getElementById('modalTrophies').style.display = 'none';
+    });
+
+    document.getElementById('btnSound').addEventListener('click', () => {
+      sound.enabled = !sound.enabled;
+      document.getElementById('btnSound').textContent = sound.enabled ? '🔊' : '🔇';
+    });
+
+    // Lancement initial
+    updateHeader();
+    selectWorld(1);
   </script>
 </body>
 </html>
