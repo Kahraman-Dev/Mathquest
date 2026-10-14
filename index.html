@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Math Quest RPG 3.0 - Édition Colorée</title>
+  <title>Math Quest RPG 3.1 - Édition Colorée</title>
   
   <!-- PWA & Mobile Settings -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,7 +27,6 @@
     }
 
     :root {
-      /* Palette par défaut (Dynamique selon le monde) */
       --bg-grad-1: #3b82f6;
       --bg-grad-2: #8b5cf6;
       --bg-grad-3: #ec4899;
@@ -66,7 +65,6 @@
       transition: background 0.6s ease;
     }
 
-    /* Bulles décoratives lumineuses en arrière-plan */
     .app-container::before {
       content: "";
       position: absolute;
@@ -79,7 +77,6 @@
       pointer-events: none;
     }
 
-    /* HEADER COLORÉ */
     header {
       display: flex;
       align-items: center;
@@ -152,7 +149,6 @@
       transform: scale(0.9);
     }
 
-    /* BANNIÈRE DU MONDE */
     .world-bar {
       display: flex;
       justify-content: center;
@@ -197,7 +193,6 @@
       50% { transform: scale(1.06); }
     }
 
-    /* CHRONO GAUGE */
     .timer-container {
       display: none;
       flex-direction: column;
@@ -232,7 +227,6 @@
       transition: width 0.1s linear, background-color 0.3s;
     }
 
-    /* ARÈNE DU MONSTRE ANIMÉ */
     .arena {
       flex: 1;
       display: flex;
@@ -417,7 +411,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* CARTE DE QUESTION LUMINEUSE */
     .question-box {
       background: rgba(255, 255, 255, 0.92);
       color: #1e1b4b;
@@ -484,7 +477,6 @@
       padding: 0 10px;
     }
 
-    /* CLAVIER ARCADE COLORÉ 3D */
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -546,7 +538,6 @@
       box-shadow: 0 1px 0 #be185d;
     }
 
-    /* FENÊTRES MODALES POP & LUMINEUSES */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -640,7 +631,6 @@
       box-shadow: 0 4px 0 #4338ca;
     }
 
-    /* LISTES (MONDES, BOUTIQUE, TROPHÉES) */
     .list-item {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -697,7 +687,6 @@
 <body>
 
   <div class="app-container" id="appContainer">
-    <!-- HEADER -->
     <header>
       <div class="badge-player" id="btnOpenShopFromAvatar" title="Changer d'avatar">
         <span id="playerIcon">🧙‍♀️</span>
@@ -718,7 +707,6 @@
       </div>
     </header>
 
-    <!-- BANNIÈRE DU MONDE -->
     <div class="world-bar">
       <div class="world-pill" id="btnChangeWorld">
         <span id="worldTitle">🌲 1. Forêt des Additions</span>
@@ -727,7 +715,6 @@
       <div class="review-badge" id="reviewBadge">🧠 Revanche !</div>
     </div>
 
-    <!-- JAUGE CHRONO -->
     <div class="timer-container" id="timerContainer">
       <div class="timer-info">
         <span>⏱️ Chrono Arène</span>
@@ -738,7 +725,6 @@
       </div>
     </div>
 
-    <!-- ARÈNE ANIMÉE -->
     <div class="arena">
       <div class="floating-dmg" id="floatingDmg">-1 PV ⚔️</div>
       <div class="monster-stage">
@@ -755,7 +741,6 @@
       </div>
     </div>
 
-    <!-- CARTE QUESTION -->
     <div class="question-box">
       <div class="question-label" id="questionLabel">RÉSOUS L'ÉNIGME</div>
       <div class="problem-text" id="problemText"></div>
@@ -765,7 +750,6 @@
       </div>
     </div>
 
-    <!-- CLAVIER COLORÉ -->
     <div class="keypad">
       <button class="key-btn" data-val="1">1</button>
       <button class="key-btn" data-val="2">2</button>
@@ -829,7 +813,6 @@
   </div>
 
   <script>
-    // --- AUTO-NETTOYEUR D'ANCIEN CACHE / SERVICE WORKER ---
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
         for (let reg of regs) reg.unregister();
@@ -839,7 +822,6 @@
       }
     }
 
-    // --- SYNTHÉTISEUR AUDIO ---
     class SoundEngine {
       constructor() { this.ctx = null; this.enabled = true; }
       init() {
@@ -887,7 +869,6 @@
     }
     const sound = new SoundEngine();
 
-    // --- SAUVEGARDE COMPATIBLE V1 & V2 ---
     const SAVE_KEY = 'MATH_QUEST_SAVE_V2';
     let saveState = {
       coins: 0,
@@ -908,18 +889,23 @@
         const rawV1 = localStorage.getItem('MATH_QUEST_SAVE_V1');
         if (rawV2) saveState = Object.assign(saveState, JSON.parse(rawV2));
         else if (rawV1) saveState = Object.assign(saveState, JSON.parse(rawV1));
+
+        // Nettoyage automatique des anciennes questions décimales à trou buggées dans la file Revanche
+        if (Array.isArray(saveState.mistakeQueue)) {
+          saveState.mistakeQueue = saveState.mistakeQueue.filter(m => !(m.worldId === 3 && m.expr && m.expr.includes('?')));
+        }
       } catch (e) {}
     }
     function saveProgress() {
       try { localStorage.setItem(SAVE_KEY, JSON.stringify(saveState)); } catch (e) {}
     }
     loadProgress();
+    saveProgress();
 
-    // --- 6 MONDES AVEC PALETTES DE COULEURS VIBRANTES ---
     const WORLDS = [
       {
         id: 1, name: "Forêt des Additions", icon: "🌲", desc: "Additions, soustractions & compléments",
-        colors: ["#059669", "#10b981", "#0d9488"], // Vert Émeraude & Menthe
+        colors: ["#059669", "#10b981", "#0d9488"],
         monsters: [
           { icon: "🐺", name: "Loup Sylvestre" },
           { icon: "🐗", name: "Sanglier Ronce" },
@@ -929,7 +915,7 @@
       },
       {
         id: 2, name: "Donjon des Tables", icon: "🏰", desc: "Tables de 6 à 9 & carrés parfaits",
-        colors: ["#4f46e5", "#7c3aed", "#c026d3"], // Indigo, Violet & Magenta
+        colors: ["#4f46e5", "#7c3aed", "#c026d3"],
         monsters: [
           { icon: "🦇", name: "Chauve-Souris" },
           { icon: "💀", name: "Squelette d'Armure" },
@@ -939,7 +925,7 @@
       },
       {
         id: 3, name: "Lagon des Décimaux", icon: "🧪", desc: "Nombres à virgule, ×10, ÷10 (Spécial 6e)",
-        colors: ["#0284c7", "#06b6d4", "#3b82f6"], // Bleu Lagon & Cyan
+        colors: ["#0284c7", "#06b6d4", "#3b82f6"],
         monsters: [
           { icon: "🐸", name: "Crapaud Alchimiste" },
           { icon: "🦎", name: "Salamandre Acide" },
@@ -949,7 +935,7 @@
       },
       {
         id: 4, name: "Volcan du Calcul Malin", icon: "🌋", desc: "Doubles, moitiés, ×9 et ×11 astucieux",
-        colors: ["#ea580c", "#e11d48", "#d97706"], // Orange Feu, Corail & Ambre
+        colors: ["#ea580c", "#e11d48", "#d97706"],
         monsters: [
           { icon: "🦅", name: "Griffon des Cimes" },
           { icon: "🔥", name: "Élémentaire de Feu" },
@@ -959,7 +945,7 @@
       },
       {
         id: 5, name: "Palais des Énigmes", icon: "📜", desc: "Problèmes variés : achats, durées, géométrie",
-        colors: ["#9333ea", "#db2777", "#6366f1"], // Pourpre Royal & Rose Vif
+        colors: ["#9333ea", "#db2777", "#6366f1"],
         monsters: [
           { icon: "🦉", name: "Chouette Savante" },
           { icon: "🧞", name: "Génie des Énigmes" },
@@ -969,7 +955,7 @@
       },
       {
         id: 6, name: "Arène du Temps", icon: "⏱️", desc: "10 secondes par calcul ! Réflexes purs",
-        colors: ["#e11d48", "#7c3aed", "#2563eb"], // Électrique Rose, Violet & Bleu
+        colors: ["#e11d48", "#7c3aed", "#2563eb"],
         monsters: [
           { icon: "⚡", name: "Esprit Foudroyant" },
           { icon: "🤖", name: "Automate Chrono" },
@@ -1063,11 +1049,12 @@
           expr = `${a.toString().replace('.', ',')} + ${b.toString().replace('.', ',')} =`;
           hint = `💡 Additionne les dixièmes ensemble puis les unités : résultat = ${ans.toString().replace('.', ',')}.`;
         } else {
+          // CORRECTIF DU COMPLÉMENT DÉCIMAL : start + ans = target
           const target = randInt(2, 9), dec = randInt(1, 9);
-          const start = target - (dec / 10);
-          ans = (10 - dec) / 10;
+          const start = Math.round((target - (dec / 10)) * 10) / 10;
+          ans = dec / 10;
           expr = `${start.toString().replace('.', ',')} + ? = ${target}`;
-          hint = `💡 Il manque ${10 - dec} dixièmes pour faire 1 unité complète, soit 0,${10 - dec}.`;
+          hint = `💡 Il manque ${dec} dixièmes pour aller de ${start.toString().replace('.', ',')} à ${target}, soit 0,${dec}.`;
         }
       } 
       else if (worldId === 4) {
@@ -1194,7 +1181,6 @@
       monsterHp = 5;
 
       const w = WORLDS.find(item => item.id === id);
-      // Changement dynamique des couleurs du thème
       document.documentElement.style.setProperty('--bg-grad-1', w.colors[0]);
       document.documentElement.style.setProperty('--bg-grad-2', w.colors[1]);
       document.documentElement.style.setProperty('--bg-grad-3', w.colors[2]);
@@ -1261,7 +1247,7 @@
     function submitAnswer() {
       if (!currentInput || currentInput === ".") return;
       stopChrono();
-      const val = parseFloat(currentInput);
+      const val = parseFloat(currentInput.replace(',', '.'));
 
       if (Math.abs(val - currentQuestion.ans) < 0.001) {
         sound.playHit();
@@ -1339,7 +1325,10 @@
 
       const ansFormatted = currentQuestion.ans.toString().replace('.', ',');
       document.getElementById('expModalTitle').textContent = title;
-      document.getElementById('hintSolution').textContent = `${currentQuestion.expr.replace('?', '')} ${ansFormatted}`;
+      // Affichage propre pour les équations à trou (remplace '?' par la réponse)
+      document.getElementById('hintSolution').textContent = currentQuestion.expr.includes('?')
+        ? currentQuestion.expr.replace('?', ansFormatted)
+        : `${currentQuestion.expr} ${ansFormatted}`;
       document.getElementById('hintExplanation').textContent = currentQuestion.hint;
       setTimeout(() => {
         document.getElementById('modalExplanation').style.display = 'flex';
